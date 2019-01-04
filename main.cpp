@@ -30,8 +30,10 @@ int main()
 	
 	// create manager
 	Manager M;
-	M.addWorldObject<Creature>(2, M.creatures, Display.textureCreature);
-	M.addWorldObject<Food>(2, M.food, Display.textureFood);
+
+	// add WorldObjects
+	M.addWorldObject<Creature>(config::MAX_CREATURES, M.creatures, Display.textureCreature);
+	M.addWorldObject<Food>(config::MAX_FOOD, M.food, Display.textureFood);
 
 
 	Display.StartMainLoop(M);

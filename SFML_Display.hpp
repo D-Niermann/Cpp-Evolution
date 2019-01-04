@@ -6,6 +6,7 @@ class SFML_Display
 	// window size
 	unsigned int wSize_x, wSize_y;
 	sf::RenderWindow m_window;
+	int frame;
 
   public:
 	sf::Texture textureCreature;
@@ -24,6 +25,14 @@ class SFML_Display
 			throw("Error");
 		}
 	}
+	
+	void printLog(Manager& M){
+		print("--- GAME INFO: ---")
+		// print("Frame:" + std::to_string(frame));
+		print("Active Creatures:" + std::to_string(M.creatures.size()));
+		print("Active Plants:" + std::to_string(M.food.size()));
+		print("\n");
+	}
 
   public:
 	//constructor
@@ -34,6 +43,7 @@ class SFML_Display
 		loadTextures();
 		m_window.setFramerateLimit(60);
 		m_window.setVerticalSyncEnabled(true);
+		frame = 0;
 	}
 
 	//deconstructor
@@ -45,12 +55,20 @@ class SFML_Display
 		// main loop
 		while (m_window.isOpen())
 		{
+			// count frames
+			frame += 1;
+
 			// poll events from sfml
 			sf::Event event;
 			while (m_window.pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed)
 					m_window.close();
+			}
+
+			// print log
+			if (frame % 60 == 0){
+				printLog(M);
 			}
 
 			// update all instances in the game world

@@ -2,6 +2,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "utils.hpp"
+
 using namespace std;
 #define print(x) std::cout << x << std::endl;
 
@@ -27,7 +29,7 @@ class Dog : public Animal
 	}
 
 	// copy constructor
-	Dog(const Dog &other, int lC, float size) : name(other.name + "_copy"), Animal(lC,size)
+	Dog(const Dog &other) : name(other.name + "_copy"), Animal(other.legCount, other.size)
 	{
 		print("Dog " + name + " Copied!")
 	}
@@ -43,6 +45,7 @@ class Dog : public Animal
 		cout << "legCount:" ; print(legCount);
 		cout << "name:" ; print(name);
 		cout << "size:" ; print(size);
+		print("\n");
 	}
 };
 
@@ -50,22 +53,39 @@ class Dog : public Animal
 
 int main()
 {
-	Dog* ptr;
+	// Dog* ptr;
 	//polymorphic
-	vector<Animal*> v;
-	for (int i = 0; i< 2; i++)
-	{
-		//polymorphic: Dog added but storage is animal
-		ptr = new Dog(std::to_string(i),1, 2);
-		print(ptr);
-		v.push_back(ptr);
-	}
-	//polymorphic info function used from Dog class
-	print("---");
-	v[0]->info();
-	print("---");
-	v[1]->info();
+	// vector<Dog> v;
 
+	// for (int i = 0; i< 3; i++)
+	// {
+	// 	//polymorphic: Dog added but storage is animal
+	// 	// ptr = new Dog(std::to_string(i),1, 2);
+	// 	// print(ptr);
+	// 	print(std::to_string(i)+"------");
+	// 	v.emplace_back(
+	// 			Dog(std::to_string(i),1, 2)
+	// 		);
+	// }
+	// //polymorphic info function used from Dog class
+	// print(v.size());
+	// print("=========")
+	// for (int i= 0; i<v.size(); i++){
+	// 	v[i].info();
+	// }
+	// // delete &v[0];
+	// v.erase(v.begin()+2);
+	// print(v.size());
+	// print("=========")
+	// for (int i= 0; i<v.size(); i++){
+	// 	v[i].info();
+	// }
+
+	position p1(1,2);
+	position p2(3,4);
+	p1 = p2;
+	p1.display();
+	p2.display();
 
 	return 0;
 }

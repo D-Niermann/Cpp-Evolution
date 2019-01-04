@@ -3,16 +3,19 @@ class Creature : public WorldObject
 {
   protected:
 	
+	float m_DecayRate;
+	
 
 	void calcHealth()
 	{
 		float h;
-		h = this->health-config::creatureDecayRate;
-		if (h < 0)
-		{
-			h = 0;
-		}
+		h = this->health-m_DecayRate;
 		health = h;
+	}
+
+	void respawn(){
+		WorldObject::respawn();
+
 	}
 
 
@@ -21,7 +24,7 @@ class Creature : public WorldObject
 	Creature(sf::Texture &texture, float x, float y) : WorldObject(texture, x, y)
 	{
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
-		print("Creature Created!");
+		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
 	}
 
 	void update()
@@ -34,12 +37,24 @@ class Creature : public WorldObject
 		pos.y += 1;
 		rot += 1;
 
+		// collision checks
+		// calcFoodDistances(); // do this in manager and make a getter for the distance array
+		collisionFood();
+
 		// performs boundary checks and sets the sprites values to the this Object values
 		transformSprite();
 	}
 
+
+	void collisionFood(){
+
+	}
+
+
 	~Creature()
 	{
-		print("Deleted Creature");
+		// print("Deleted Creature");
 	}
+
+	float getHealth(){ return health; }
 };

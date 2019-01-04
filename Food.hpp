@@ -9,4 +9,11 @@ class Food : public WorldObject
 		m_sprite.setScale(config::foodSpriteScale, config::foodSpriteScale);
 		m_sprite.setRotation(random(0,360));
 	}
+
+	void update(){
+		WorldObject::update();
+	}
+
+	void respawn(){}
+	
 };

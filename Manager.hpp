@@ -1,13 +1,14 @@
-// stores and opens sprites and creatures
-
+class SFML_Display;
 
 class Manager
 {
-	private:
+	protected:
 		// for polymorph array
 		// creatures (polymorphism with worldObject -> store all objects in one array)
 		// WorldObject* p = NULL;
 		// std::vector<WorldObject*> Objects;
+		// const SFML_Display* const dis_ptr;
+
 	public:
 		
 		// plant  creatures
@@ -28,7 +29,7 @@ class Manager
 			// add all class instances of type T to the save vector
 			for (int i = 0; i < count; i++)
 			{
-				saveVector.push_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m)) );
+				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m)) );
 			}
 		}
 
@@ -40,7 +41,7 @@ class Manager
 			// updates all creatures
 			for(int i = 0; i<creatures.size(); i++){
 				creatures[i].update();
-				print(creatures[i].getPos().x);
+
 			}
 
 		}

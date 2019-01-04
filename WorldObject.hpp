@@ -3,6 +3,12 @@
 class WorldObject
 {
   protected:
+  	// start values 
+  	static constexpr float S_HEALTH = 1;
+	static const int S_LIFETIME = 0;
+	static constexpr float S_ROTATION = 0;
+	
+	// runtime values
 	position pos;
 	int lifetime;
 	float health;
@@ -16,9 +22,9 @@ class WorldObject
 	// Constructor
 	WorldObject(sf::Texture& texture, float x, float y) : m_sprite(texture), pos(x, y) 
 	{
-		rot = 0;
-		health = 1;
-		lifetime = 0;
+		rot = S_ROTATION;
+		health = S_HEALTH;
+		lifetime = S_LIFETIME;
 
 		m_sprite.setPosition(x,y);
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
@@ -31,6 +37,7 @@ class WorldObject
 	{
 		lifetime += 1;
 		calcHealth();
+		respawnCheck();
 	}
 
 	void boundaryCheck(){
@@ -59,6 +66,20 @@ class WorldObject
 		m_sprite.setColor(sf::Color(255,255,255,health*255));
 	}
 
+
+	void respawnCheck(){
+		if (health <= 0)
+		{
+			respawn();
+		}
+	}
+
+	virtual void respawn()
+	{
+		health = WorldObject::S_HEALTH;
+		pos = randomPositionInWindow();
+		transformSprite();
+	}
 
 	const position& getPos() const
 	{
