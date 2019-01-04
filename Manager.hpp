@@ -4,6 +4,9 @@
 class Manager
 {
 	private:
+		// for polymorph array
+		// WorldObject* p = NULL;
+		// std::vector<WorldObject*> Objects;
 		
 		// creatures (polymorphism with worldObject? -> store all objects in one array)
 		std::vector<Creature> creatures;
@@ -21,10 +24,12 @@ class Manager
 	public:
 
 		// add food objects
-		void addFood(unsigned int count, sf::Texture& texture){
+		void addFood(unsigned int count, sf::Texture& texture)
+		{
+			int m = config::worldMargin;
 			for (int i = 0; i < count; i++)
 			{
-				food.push_back( Food(texture, random(0,config::WINDOW_X), random(0,config::WINDOW_Y)) );
+				food.push_back( Food(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m)) );
 			}
 			m_food_count = count;
 		}
@@ -37,11 +42,17 @@ class Manager
 				creatures.push_back(
 					Creature(texture, random(0,config::WINDOW_X), random(0,config::WINDOW_Y))
 					);
+
+				// try out objects vector
+				// print("Store in Object:");
+				// p = new Creature(texture, random(0,config::WINDOW_X), random(0,config::WINDOW_Y));	
+				// Objects.push_back(p);
 			}
 			m_creature_count = count;
 		}
 
-		void updateAll(){
+		void updateAll()
+		{
 			// updates all creatures
 			for(int i = 0; i<m_creature_count; i++){
 				creatures[i].update();
@@ -84,4 +95,11 @@ class Manager
 			}
 		}
 		const std::vector<Creature> &getCreatures() const { return creatures; }
+
+		// const void printObjects(){
+		// 	for (int i = 0; i<m_creature_count; i++)
+		// 	{
+		// 		std::cout << Objects[i]->getSprite() <<std::endl;
+		// 	}
+		// }
 };

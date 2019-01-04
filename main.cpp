@@ -21,11 +21,13 @@ TODO:
 	manager class only one array for all sprites ? or one methods that just returns all sprites correctly
 		- would remove all dublicate accessor functions
 	manager class one array for food and creatures ? vector<base class> polymorphism?
+		- or just give the save array to the functions and tell a telplate which class to store in it 
 */
+
 int main()
 {
 	// create the display class for window and main loop
-	SFML_Display Display(config::WINDOW_X,config::WINDOW_Y);
+	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);
 	
 	// create manager
 	Manager M;

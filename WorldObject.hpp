@@ -16,13 +16,21 @@ class WorldObject
 	// Constructor
 	WorldObject(sf::Texture& texture, float x, float y) : m_sprite(texture), pos(x, y) 
 	{
+		rot = 0;
+		health = 1;
+		lifetime = 0;
+
 		m_sprite.setPosition(x,y);
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 	}
 
+	// in inherited class redife the health behaviour
+	virtual void calcHealth(){ }
+
 	virtual void update()
 	{
 		lifetime += 1;
+		calcHealth();
 	}
 
 	void boundaryCheck(){
@@ -44,10 +52,11 @@ class WorldObject
 		}
 	}
 
-	void moveSprite(){
+	void transformSprite(){
 		boundaryCheck();
 		m_sprite.setPosition(pos.x,pos.y);
 		m_sprite.setRotation(rot);
+		m_sprite.setColor(sf::Color(255,255,255,health*255));
 	}
 
 
@@ -61,13 +70,6 @@ class WorldObject
 		return m_sprite;
 	}
 	// // Copy constructor
-	// Creature(const Creature& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){
+	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){
 
-	// }
-
-	// // Deconstructor
-	// ~Creature()
-	// {
-
-	// }
 };

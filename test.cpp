@@ -10,8 +10,9 @@ class Animal
   protected:
 	int legCount;
 	float size;
-	Animal(int legCount, float hairs) : legCount(legCount), size(size) {}
-
+	Animal(int legCount, float size) : legCount(legCount), size(size) {}
+  public:
+	virtual void info(){};
 };
 
 class Dog : public Animal
@@ -20,13 +21,13 @@ class Dog : public Animal
 	string name;
 
 	// constructor
-	Dog(string name , int lC) : name(name), Animal(lC,3)
+	Dog(string name , int lC, float size) : name(name), Animal(lC, size)
 	{
 		print("Dog " + name + " created!");
 	}
 
 	// copy constructor
-	Dog(const Dog &other, int lC) : name(other.name + "_copy"), Animal(lC,3)
+	Dog(const Dog &other, int lC, float size) : name(other.name + "_copy"), Animal(lC,size)
 	{
 		print("Dog " + name + " Copied!")
 	}
@@ -39,9 +40,9 @@ class Dog : public Animal
 
 	void info(){
 		print("info:");
-		print(legCount);
-		print(name);
-		print(size);
+		cout << "legCount:" ; print(legCount);
+		cout << "name:" ; print(name);
+		cout << "size:" ; print(size);
 	}
 };
 
@@ -49,15 +50,22 @@ class Dog : public Animal
 
 int main()
 {
+	Dog* ptr;
+	//polymorphic
+	vector<Animal*> v;
+	for (int i = 0; i< 2; i++)
+	{
+		//polymorphic: Dog added but storage is animal
+		ptr = new Dog(std::to_string(i),1, 2);
+		print(ptr);
+		v.push_back(ptr);
+	}
+	//polymorphic info function used from Dog class
+	print("---");
+	v[0]->info();
+	print("---");
+	v[1]->info();
 
-	vector<Dog> v;
-	Dog d1("alex",1);
-	d1.info();
-	// Dog d2("tim");
-	// Dog d2 = d1;
-
-	// this copies the dog
-	// v.push_back(Dog("charles"));
 
 	return 0;
 }

@@ -15,11 +15,14 @@ struct position
 };
 
 
-struct config{
+struct config
+{
 	static const unsigned int WINDOW_X = 1000;
 	static const unsigned int WINDOW_Y = 500;
 
 	static constexpr float foodSpriteScale = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
 	static const int worldMargin = 20;
+
+	static constexpr float creatureDecayRate = 0.001;
 };

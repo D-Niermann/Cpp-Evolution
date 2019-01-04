@@ -2,11 +2,16 @@
 class Creature : public WorldObject
 {
   protected:
-	// sf::RenderWindow &m_window;
+	
 
-	float calcHealth()
+	void calcHealth()
 	{
-		return 0;
+		float h;
+		h = this->health-config::creatureDecayRate;
+		if (h < 0){
+			h = 0;
+		}
+		health = h;
 	}
 
 
@@ -19,12 +24,20 @@ class Creature : public WorldObject
 
 	void update()
 	{
-		// transform object
+		// base class update call
+		WorldObject::update();
+	
+		// transform
 		pos.x += 1;
 		pos.y += 1;
 		rot += 1;
 
 		// performs boundary checks and sets the sprites values to the this Object values
-		moveSprite();
+		transformSprite();
+	}
+
+	~Creature()
+	{
+		print("Deleted Creature");
 	}
 };
