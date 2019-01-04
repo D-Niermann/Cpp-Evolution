@@ -32,9 +32,7 @@ int main()
 	Manager M;
 	M.addWorldObject<Creature>(2, M.creatures, Display.textureCreature);
 	M.addWorldObject<Food>(2, M.food, Display.textureFood);
-	// M.addCreatures(3, Display.textureCreature);
-	// auto s = M.getCreatures().size();
-	// print(s);
+
 
 	Display.StartMainLoop(M);
 }
