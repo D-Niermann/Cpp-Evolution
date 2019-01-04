@@ -8,7 +8,8 @@ class Creature : public WorldObject
 	{
 		float h;
 		h = this->health-config::creatureDecayRate;
-		if (h < 0){
+		if (h < 0)
+		{
 			h = 0;
 		}
 		health = h;
@@ -20,6 +21,7 @@ class Creature : public WorldObject
 	Creature(sf::Texture &texture, float x, float y) : WorldObject(texture, x, y)
 	{
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
+		print("Creature Created!");
 	}
 
 	void update()

@@ -17,10 +17,9 @@
 
 /*
 TODO:
-	manager class does not really push back, count vars need to be added correctly, also needs remove (delete) methods
-	manager class only one array for all sprites ? or one methods that just returns all sprites correctly
-		- would remove all dublicate accessor functions
-	manager class one array for food and creatures ? vector<base class> polymorphism?
+	Manager class does not really push back, count vars need to be added correctly, also needs remove (delete) methods
+
+	Manager
 		- or just give the save array to the functions and tell a telplate which class to store in it 
 */
 
@@ -31,9 +30,11 @@ int main()
 	
 	// create manager
 	Manager M;
-	M.addFood(20, Display.textureFood);
-	M.addCreatures(3, Display.textureCreature);
-
+	M.addWorldObject<Creature>(2, M.creatures, Display.textureCreature);
+	M.addWorldObject<Food>(2, M.food, Display.textureFood);
+	// M.addCreatures(3, Display.textureCreature);
+	// auto s = M.getCreatures().size();
+	// print(s);
 
 	Display.StartMainLoop(M);
 }

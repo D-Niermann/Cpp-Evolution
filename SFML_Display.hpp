@@ -60,13 +60,13 @@ class SFML_Display
 			m_window.clear(sf::Color(50, 200, 50));
 
 			// iterate all sprites and draw them
-			for (int i = 0; i < M.getFoodCount(); i++)
+			for (int i = 0; i < M.food.size(); i++)
 			{
-				m_window.draw(M.getFoodSprite(i));
+				m_window.draw(M.food[i].getSprite());
 			}
-			for (int i = 0; i < M.getObjectCount(); i++)
+			for (int i = 0; i < M.creatures.size(); i++)
 			{
-				m_window.draw(M.getCreatureSprite(i));
+				m_window.draw(M.creatures[i].getSprite());
 			}
 
 			// display all stuff
