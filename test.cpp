@@ -1,8 +1,11 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <cmath>
 #include <vector>
 #include "utils.hpp"
+#include "Dependencies/eigen/Eigen/Dense"
+
 
 using namespace std;
 #define print(x) std::cout << x << std::endl;
@@ -81,11 +84,12 @@ int main()
 	// 	v[i].info();
 	// }
 
-	position p1(1,2);
-	position p2(3,4);
-	p1 = p2;
-	p1.display();
-	p2.display();
+	Eigen::MatrixXf m;
+	Eigen::Vector3f out;
+	Eigen::Vector2f in;
+	
+	m = m.Random(5,2);
 
+	print(m.block(1,0,4,1));
 	return 0;
 }

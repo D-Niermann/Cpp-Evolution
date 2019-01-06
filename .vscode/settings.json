@@ -4,6 +4,8 @@
 		"dense": "cpp",
 		"memory": "cpp",
 		"vector": "cpp",
-		"__config": "cpp"
+		"__config": "cpp",
+		"cmath": "cpp",
+		"complex": "cpp"
 	}
 }

@@ -20,7 +20,7 @@ class WorldObject
 	// references to sfml stuff
 	sf::Sprite m_sprite;
 	
-	// in inherited class redife the health behaviour
+
 	virtual void calcHealth(){ 
 		float h;
 		h = this->health-m_DecayRate;
@@ -50,6 +50,7 @@ class WorldObject
 	}
 
 	void boundaryCheck(){
+		// limit position
 		if (pos.x > config::WINDOW_X-config::worldMargin)
 		{
 			pos.x = config::WINDOW_X-config::worldMargin;
@@ -65,6 +66,10 @@ class WorldObject
 		else if (pos.y < config::worldMargin)
 		{
 			pos.y = config::worldMargin;
+		}
+		// limit rotation
+		if (rot > 360 || rot < 0){
+			rot = 0;
 		}
 	}
 
@@ -87,6 +92,7 @@ class WorldObject
 	{
 		health = WorldObject::S_HEALTH;
 		pos = randomPositionInWindow();
+		rot = 0;
 		transformSprite();
 	}
 
@@ -95,9 +101,22 @@ class WorldObject
 		return pos;
 	}
 
+	const float& getRot()
+	{
+		if (rot<0 || rot>360){
+			rot = 0;
+		}
+		return rot;
+	}
+
 	const sf::Sprite& getSprite() const
 	{
 		return m_sprite;
+	}
+
+	const float& getHealth()
+	{ 
+		return health;
 	}
 	// // Copy constructor
 	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){

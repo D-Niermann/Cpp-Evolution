@@ -11,6 +11,5 @@ class Food : public WorldObject
 	}
 
 
-	void respawn(){}
 
 };

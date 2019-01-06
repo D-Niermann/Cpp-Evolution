@@ -41,8 +41,8 @@ class SFML_Display
 															   m_window({wSize_x, wSize_y}, "MainWindow")
 	{
 		loadTextures();
-		m_window.setFramerateLimit(60);
-		m_window.setVerticalSyncEnabled(true);
+		m_window.setFramerateLimit(config::FRAMERATE);
+		m_window.setVerticalSyncEnabled(config::VSYNC);
 		frame = 0;
 	}
 
@@ -68,7 +68,7 @@ class SFML_Display
 
 			// print log
 			if (frame % 60 == 0){
-				printLog(M);
+				// printLog(M);
 			}
 
 			// update all instances in the game world
@@ -85,6 +85,8 @@ class SFML_Display
 			for (int i = 0; i < M.creatures.size(); i++)
 			{
 				m_window.draw(M.creatures[i].getSprite());
+				// draw debug lines
+				//m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
 			}
 
 			// display all stuff

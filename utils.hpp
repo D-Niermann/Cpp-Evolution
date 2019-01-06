@@ -22,11 +22,36 @@ struct position
 	}
 };
 
+struct NN_Input
+{
+	// distance to the nearest food source
+	float dist;
+	// angle to the neares food source
+	float angle;
+
+	// number of input vars
+	static const int mysize = 2;
+
+	NN_Input(){
+		dist = 0;
+		angle = 0;
+	}
+
+	const int& size(){
+		return this->mysize;
+	}
+
+	void display(){
+		std::cout << "Distance: " << dist << "," << "Angle: " << angle << std::endl;
+	}
+};
 
 
 
 struct config
 {
+	static const unsigned int FRAMERATE = 60;
+	static const bool VSYNC = true;
 	static const unsigned int WINDOW_X = 1000;
 	static const unsigned int WINDOW_Y = 500;
 
@@ -34,10 +59,11 @@ struct config
 	static constexpr float creatureSpriteScale = 1.0;
 	static const int worldMargin = 20;
 
-	static constexpr float creatureDecayRate = 0.01;
+	static constexpr float creatureDecayRate = 0.001;
+	static constexpr float creatureFoodReach = 20;
 
-	static const unsigned int MAX_CREATURES = 10;
-	static const unsigned int MAX_FOOD = 30;
+	static const unsigned int MAX_CREATURES = 100;
+	static const unsigned int MAX_FOOD = 1;
 };
 
 
@@ -57,4 +83,26 @@ position randomPositionInWindow()
 	p.x = x;
 	p.y = y;
 	return p; 
+}
+
+float vec_angle(float x, float y)
+{
+	// SP betwenn input vector and x axis
+	float SP = x;
+	// length of input vector
+	float len = sqrt(pow(x,2)+pow(y,2));
+	// SP definition
+	float angle = acos(SP/len);
+	return angle*180/3.1415;
+}
+
+float clamp(float x, float min, float max)
+{
+	if (x > max){
+		x = max;
+	}
+	else if (x<min){
+		x = min;
+	}
+	return x;
 }
