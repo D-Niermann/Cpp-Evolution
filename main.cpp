@@ -17,10 +17,7 @@
 
 /*
 TODO:
-	Manager class does not really push back, count vars need to be added correctly, also needs remove (delete) methods
-
-	Manager
-		- or just give the save array to the functions and tell a telplate which class to store in it 
+	Manager, Display and WorldObject instances should have references to each other
 */
 
 int main()

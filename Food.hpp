@@ -1,8 +1,8 @@
 
 class Food : public WorldObject
 {
-  private:
-	/* data */
+  protected:
+
   public:
 	Food(sf::Texture &texture, float x, float y) : WorldObject(texture, x, y) 
 	{
@@ -10,10 +10,7 @@ class Food : public WorldObject
 		m_sprite.setRotation(random(0,360));
 	}
 
-	void update(){
-		WorldObject::update();
-	}
 
 	void respawn(){}
-	
+
 };

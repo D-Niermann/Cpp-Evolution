@@ -2,21 +2,7 @@
 class Creature : public WorldObject
 {
   protected:
-	
-	float m_DecayRate;
-	
 
-	void calcHealth()
-	{
-		float h;
-		h = this->health-m_DecayRate;
-		health = h;
-	}
-
-	void respawn(){
-		WorldObject::respawn();
-
-	}
 
 
   public:
@@ -27,34 +13,31 @@ class Creature : public WorldObject
 		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
 	}
 
+
 	void update()
 	{
 		// base class update call
 		WorldObject::update();
+		// WARNING: this also already transforms the sprite, thus position changes are only effective next frame
 	
 		// transform
 		pos.x += 1;
 		pos.y += 1;
 		rot += 1;
 
-		// collision checks
-		// calcFoodDistances(); // do this in manager and make a getter for the distance array
-		collisionFood();
-
-		// performs boundary checks and sets the sprites values to the this Object values
-		transformSprite();
 	}
-
-
-	void collisionFood(){
-
+		
+	void eat()
+	{
+		// gets called externally when collision with food is detected
+		health = S_HEALTH;
 	}
-
 
 	~Creature()
 	{
 		// print("Deleted Creature");
 	}
+
 
 	float getHealth(){ return health; }
 };

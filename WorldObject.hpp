@@ -7,6 +7,9 @@ class WorldObject
   	static constexpr float S_HEALTH = 1;
 	static const int S_LIFETIME = 0;
 	static constexpr float S_ROTATION = 0;
+
+	//constants
+	float m_DecayRate;
 	
 	// runtime values
 	position pos;
@@ -17,6 +20,12 @@ class WorldObject
 	// references to sfml stuff
 	sf::Sprite m_sprite;
 	
+	// in inherited class redife the health behaviour
+	virtual void calcHealth(){ 
+		float h;
+		h = this->health-m_DecayRate;
+		health = h;
+	}
 
   public:
 	// Constructor
@@ -26,18 +35,18 @@ class WorldObject
 		health = S_HEALTH;
 		lifetime = S_LIFETIME;
 
+		m_DecayRate = 0;
+
 		m_sprite.setPosition(x,y);
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 	}
-
-	// in inherited class redife the health behaviour
-	virtual void calcHealth(){ }
 
 	virtual void update()
 	{
 		lifetime += 1;
 		calcHealth();
 		respawnCheck();
+		transformSprite();
 	}
 
 	void boundaryCheck(){

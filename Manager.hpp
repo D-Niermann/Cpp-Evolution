@@ -1,24 +1,13 @@
-class SFML_Display;
 
 class Manager
 {
 	protected:
-		// for polymorph array
-		// creatures (polymorphism with worldObject -> store all objects in one array)
-		// WorldObject* p = NULL;
-		// std::vector<WorldObject*> Objects;
-		// const SFML_Display* const dis_ptr;
 
 	public:
-		
 		// plant  creatures
 		std::vector<Creature> creatures;
-		
 		// food 
 		std::vector<Food> food;
-		
-		// vars
-
 	
 		// add class to given array
 		template < class T >
@@ -34,24 +23,21 @@ class Manager
 		}
 
 
-
-
 		void updateAll()
 		{
 			// updates all creatures
 			for(int i = 0; i<creatures.size(); i++){
 				creatures[i].update();
-
+			}
+			// updates all food
+			for(int i = 0; i<food.size(); i++){
+				food[i].update();
 			}
 
 		}
 
-
-	
-		// const void printObjects(){
-		// 	for (int i = 0; i<m_creature_count; i++)
-		// 	{
-		// 		std::cout << Objects[i]->getSprite() <<std::endl;
-		// 	}
-		// }
+		void CollisionCheck()
+		{
+			// go through all creatures and food and if distance is below threshold destroy food and call creature[i].eat()
+		}
 };
