@@ -31,8 +31,8 @@ int main()
 	Manager M;
 
 	// add WorldObjects
-	M.addWorldObject<Creature>(config::MAX_CREATURES, M.creatures, Display.textureCreature);
-	M.addWorldObject<Food>(config::MAX_FOOD, M.food, Display.textureFood);
+	M.addWorldObject<Creature>(config::MAX_CREATURES, M.creatures, Display.textureCreature, Display.font);
+	M.addWorldObject<Food>(config::MAX_FOOD, M.food, Display.textureFood, Display.font);
 
 
 	Display.StartMainLoop(M);

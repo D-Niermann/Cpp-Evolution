@@ -54,15 +54,16 @@ struct config
 	static const bool VSYNC = true;
 	static const unsigned int WINDOW_X = 1000;
 	static const unsigned int WINDOW_Y = 500;
+	static const unsigned int TEXTSIZE = 12;
 
 	static constexpr float foodSpriteScale = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
 	static const int worldMargin = 20;
 
 	static constexpr float creatureDecayRate = 0.001;
-	static constexpr float creatureFoodReach = 20;
+	static constexpr float creatureFoodReach = 30;
 
-	static const unsigned int MAX_CREATURES = 100;
+	static const unsigned int MAX_CREATURES = 10;
 	static const unsigned int MAX_FOOD = 1;
 };
 
@@ -83,6 +84,11 @@ position randomPositionInWindow()
 	p.x = x;
 	p.y = y;
 	return p; 
+}
+
+std::string roundToString(float n, int n_digits)
+{
+	return std::to_string(n).substr(0,n_digits);
 }
 
 float vec_angle(float x, float y)

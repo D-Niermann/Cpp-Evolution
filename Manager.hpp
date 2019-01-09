@@ -11,14 +11,14 @@ class Manager
 	
 		// add class to given array
 		template < class T >
-		void addWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture)
+		void addWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture, sf::Font& font)
 		{
 			// redefine variable for shorter code line
 			int m = config::worldMargin;
 			// add all class instances of type T to the save vector
 			for (int i = 0; i < count; i++)
 			{
-				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m)) );
+				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m), font) );
 			}
 		}
 

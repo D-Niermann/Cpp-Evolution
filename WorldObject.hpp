@@ -9,7 +9,7 @@ class WorldObject
 	static constexpr float S_ROTATION = 0;
 
 	//constants
-	float m_DecayRate;
+	float m_DecayRate = 0;
 	
 	// runtime values
 	position pos;
@@ -19,6 +19,8 @@ class WorldObject
 	float rot;
 	// references to sfml stuff
 	sf::Sprite m_sprite;
+	sf::Text m_text;
+	sf::Text m_text2;
 	
 
 	virtual void calcHealth(){ 
@@ -29,18 +31,24 @@ class WorldObject
 
   public:
 	// Constructor
-	WorldObject(sf::Texture& texture, float x, float y) : m_sprite(texture), pos(x, y) 
+	WorldObject(sf::Texture& texture, float x, float y, sf::Font& font) : m_sprite(texture), pos(x, y) 
 	{
-		rot = S_ROTATION;
-		health = S_HEALTH;
-		lifetime = S_LIFETIME;
-
-		m_DecayRate = 0;
+		respawn();
 
 		m_sprite.setPosition(x,y);
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+
+		init_text(m_text, font);
+		init_text(m_text2, font);
 	}
 
+	void init_text(sf::Text& t, sf::Font& font)
+	{
+		t.setFont(font);
+		t.setStyle(sf::Text::Bold);
+		t.setFillColor(sf::Color::Black);
+		t.setCharacterSize(config::TEXTSIZE);
+	}
 	virtual void update()
 	{
 		lifetime += 1;
@@ -90,9 +98,10 @@ class WorldObject
 
 	virtual void respawn()
 	{
+		rot = WorldObject::S_ROTATION;
+		lifetime = WorldObject::S_LIFETIME;
 		health = WorldObject::S_HEALTH;
 		pos = randomPositionInWindow();
-		rot = 0;
 		transformSprite();
 	}
 
@@ -112,6 +121,16 @@ class WorldObject
 	const sf::Sprite& getSprite() const
 	{
 		return m_sprite;
+	}
+
+	const sf::Text& getText(unsigned int i) const 
+	{
+		if (i==0){
+			return m_text;
+		}
+		else{
+			return m_text2;
+		}
 	}
 
 	const float& getHealth()

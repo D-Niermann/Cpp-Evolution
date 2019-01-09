@@ -11,6 +11,8 @@ class SFML_Display
   public:
 	sf::Texture textureCreature;
 	sf::Texture textureFood;
+	sf::Font font;
+
 
 	void loadTextures()
 	{
@@ -41,6 +43,11 @@ class SFML_Display
 															   m_window({wSize_x, wSize_y}, "MainWindow")
 	{
 		loadTextures();
+		
+		// load font
+		if (!font.loadFromFile("Fonts/arial.ttf")){}
+
+		// window settings
 		m_window.setFramerateLimit(config::FRAMERATE);
 		m_window.setVerticalSyncEnabled(config::VSYNC);
 		frame = 0;
@@ -85,8 +92,16 @@ class SFML_Display
 			for (int i = 0; i < M.creatures.size(); i++)
 			{
 				m_window.draw(M.creatures[i].getSprite());
+			
+				/*
+				DEBUG DRAW
+				*/
 				// draw debug lines
-				//m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
+				m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
+				// debug text
+				for (int t = 0; t<2; t++){
+					m_window.draw(M.creatures[i].getText(t));
+				}
 			}
 
 			// display all stuff
