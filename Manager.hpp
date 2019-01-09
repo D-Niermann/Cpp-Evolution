@@ -109,10 +109,19 @@ class Manager
 				if (creatures[i].getScore()>best_score){
 					best_creature = &creatures[i];
 				}
+				
+				
 			}
 		}
-
-		Creature* getBestCreature(){
+		void reproduceCreatures(sf::Texture& texture, sf::Font& font){
+			// reproduce
+			for(int i = 0; i<creatures.size(); i++){
+				if (creatures[i].getLifetime()%500==0 && creatures[i].getLifetime()>0){
+					addWorldObject<Creature>(1,creatures,texture, font);
+				}
+			}
+		}
+		const Creature* getBestCreature(){
 			return best_creature;
 		}
 

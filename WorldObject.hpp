@@ -146,6 +146,10 @@ class WorldObject
 		score = health;
 		return score;
 	}
+
+	virtual int getLifetime(){
+		return lifetime;
+	}
 	// // Copy constructor
 	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){
 

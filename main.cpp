@@ -16,12 +16,7 @@
 #include "SFML_Display.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
-/*
-TODO:
-	Manager, Display and WorldObject instances should have references to each other (maybe)
-	input actually smalles distance and angle to create
-	enable real push back dynamical array for reproduction
-*/
+
 
 int main()
 {

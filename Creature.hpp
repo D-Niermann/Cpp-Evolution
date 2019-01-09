@@ -111,7 +111,8 @@ class Creature : public WorldObject
 
 
 	}
-		
+
+	
 	void eat()
 	{
 		// gets called externally when collision with food is detected
@@ -130,6 +131,8 @@ class Creature : public WorldObject
 	position& getV_e(){
 		return v_e;
 	}
+
+
 
 
 	

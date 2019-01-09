@@ -30,11 +30,11 @@ class SFML_Display
 	}
 	
 	void printLog(Manager& M){
-		// print("--- GAME INFO: ---")
-		// // print("Frame:" + std::to_string(frame));
-		// print("Active Creatures:" + std::to_string(M.creatures.size()));
-		// print("Active Plants:" + std::to_string(M.food.size()));
-		// print("\n");
+		print("--- GAME INFO: ---");
+		// print("Frame:" + std::to_string(frame));
+		print("Active Creatures:" + std::to_string(M.creatures.size()));
+		print("Active Plants:" + std::to_string(M.food.size()));
+		print("\n");
 	}
 
   public:
@@ -100,6 +100,11 @@ class SFML_Display
 			if (!GamePaused)
 			{
 				M.updateAll();
+				
+				// check reproduction
+				if (frame % 60 == 0){
+					M.reproduceCreatures(textureCreature, font);
+				}
 			}
 
 			//Draw stuff
