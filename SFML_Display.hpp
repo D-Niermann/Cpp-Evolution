@@ -7,6 +7,7 @@ class SFML_Display
 	unsigned int wSize_x, wSize_y;
 	sf::RenderWindow m_window;
 	int frame;
+	bool GamePaused;
 
   public:
 	sf::Texture textureCreature;
@@ -29,11 +30,11 @@ class SFML_Display
 	}
 	
 	void printLog(Manager& M){
-		print("--- GAME INFO: ---")
-		// print("Frame:" + std::to_string(frame));
-		print("Active Creatures:" + std::to_string(M.creatures.size()));
-		print("Active Plants:" + std::to_string(M.food.size()));
-		print("\n");
+		// print("--- GAME INFO: ---")
+		// // print("Frame:" + std::to_string(frame));
+		// print("Active Creatures:" + std::to_string(M.creatures.size()));
+		// print("Active Plants:" + std::to_string(M.food.size()));
+		// print("\n");
 	}
 
   public:
@@ -51,6 +52,7 @@ class SFML_Display
 		m_window.setFramerateLimit(config::FRAMERATE);
 		m_window.setVerticalSyncEnabled(config::VSYNC);
 		frame = 0;
+		GamePaused = false;
 	}
 
 	//deconstructor
@@ -69,18 +71,38 @@ class SFML_Display
 			sf::Event event;
 			while (m_window.pollEvent(event))
 			{
+				// window close event
 				if (event.type == sf::Event::Closed)
 					m_window.close();
+
+				// key press events
+				if (event.type == sf::Event::KeyPressed){
+					// P key pressed 
+					if (event.key.code == sf::Keyboard::P){
+						GamePaused = !GamePaused;
+						if(GamePaused){
+							std::cout << "Game Paused!" << std::endl;
+						}
+						else{
+							std::cout << "Game Continued!" << std::endl;
+						}
+					}
+				}
+
 			}
 
 			// print log
 			if (frame % 60 == 0){
-				// printLog(M);
+				printLog(M);
 			}
 
 			// update all instances in the game world
-			M.updateAll();
+			if (!GamePaused)
+			{
+				M.updateAll();
+			}
 
+			//Draw stuff
 			// clear the window from prev frame
 			m_window.clear(sf::Color(50, 200, 50));
 

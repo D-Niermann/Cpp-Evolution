@@ -98,8 +98,6 @@ class Creature : public WorldObject
 		rot += clamp(l_output[2],-max_rot_speed,max_rot_speed);
 		
 
-		vertices[0] = sf::Vertex(sf::Vector2f(  pos.x,  pos.y), sf::Color::Red);
-		vertices[1] = sf::Vertex(sf::Vector2f(  pos.x+v_e.x*10, pos.y+v_e.y*10), sf::Color::Red);
 
 		// base class update call
 		WorldObject::update();
@@ -127,6 +125,10 @@ class Creature : public WorldObject
 
 	void giveInput(const NN_Input& I){
 		this->input_container = I;
+	}
+
+	position& getV_e(){
+		return v_e;
 	}
 
 

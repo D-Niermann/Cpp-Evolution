@@ -15,6 +15,7 @@ class WorldObject
 	position pos;
 	int lifetime;
 	float health;
+	float score;
 	// rotation
 	float rot;
 	// references to sfml stuff
@@ -76,7 +77,10 @@ class WorldObject
 			pos.y = config::worldMargin;
 		}
 		// limit rotation
-		if (rot > 360 || rot < 0){
+		if (rot < 0){
+			rot = 360 + rot;
+		}
+		if (rot > 360){
 			rot = 0;
 		}
 	}
@@ -136,6 +140,11 @@ class WorldObject
 	const float& getHealth()
 	{ 
 		return health;
+	}
+
+	const virtual float& getScore(){
+		score = health;
+		return score;
 	}
 	// // Copy constructor
 	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){

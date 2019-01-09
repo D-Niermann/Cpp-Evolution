@@ -14,6 +14,7 @@
 #include "Food.hpp"
 #include "Manager.hpp"
 #include "SFML_Display.hpp"
+#include "SFML/Window/Keyboard.hpp"
 
 /*
 TODO:

@@ -20,6 +20,13 @@ struct position
 		this->y = pos.y;
 		return *this;
 	}
+	
+	position operator - (){
+		position v;
+		v.x = - this->x;
+		v.y = - this->y;
+		return v;
+	}
 };
 
 struct NN_Input
@@ -64,7 +71,7 @@ struct config
 	static constexpr float creatureFoodReach = 30;
 
 	static const unsigned int MAX_CREATURES = 10;
-	static const unsigned int MAX_FOOD = 1;
+	static const unsigned int MAX_FOOD = 10;
 };
 
 
@@ -91,15 +98,19 @@ std::string roundToString(float n, int n_digits)
 	return std::to_string(n).substr(0,n_digits);
 }
 
-float vec_angle(float x, float y)
+float vec_angle_in_deg(float x, float y)
 {
-	// SP betwenn input vector and x axis
-	float SP = x;
-	// length of input vector
-	float len = sqrt(pow(x,2)+pow(y,2));
-	// SP definition
-	float angle = acos(SP/len);
+	
+	float angle = atan2f(x,y)-3.1415/2;
+	if (angle<0){
+		angle = angle+2*3.1415;
+	}
 	return angle*180/3.1415;
+}
+
+float angle_in_deg(position v1, position v2)
+{
+	return std::atan2f(v1.x*v2.y-v1.y*v2.x,v1.x*v2.x+v1.y*v2.y)*180/3.1415;
 }
 
 float clamp(float x, float min, float max)
