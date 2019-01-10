@@ -9,6 +9,7 @@ class Food : public WorldObject
 		float rng = random(-0.1,0.1);
 		m_sprite.setScale(config::foodSpriteScale+rng, config::foodSpriteScale+rng);
 		m_sprite.setRotation(random(0,360));
+		print("Commit Test!");
 	}
 
 
