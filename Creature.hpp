@@ -59,7 +59,6 @@ class Creature : public WorldObject
 
 	void respawn() override
 	{
-		WorldObject::respawn();
 		/*
 		Eigen
 		*/
@@ -67,9 +66,10 @@ class Creature : public WorldObject
 		weights1 = weights1.Random(n_hidden_units, n_input_units)*w_init_multiplier;
 		weights2 = weights2.Random(n_output_units, n_hidden_units)*w_init_multiplier;
 		// random init of bias
-		b_input = b_input.Random(n_input_units)*w_init_multiplier;
 		b_hidden = b_hidden.Random(n_hidden_units)*w_init_multiplier;
 		b_output = b_output.Random(n_output_units)*w_init_multiplier;
+		b_output(0) = 0.5;
+		b_output(1) = 0;
 		// weights1.block(1,0,n_hidden_units-1,1) = MatrixXf().Zero(n_hidden_units-1,1);
 		// zero init of visible layers
 		l_input = l_input.Zero(n_input_units);
@@ -81,6 +81,7 @@ class Creature : public WorldObject
 		ang	o	o	o = rot. speed and dir [-1,1]
 				o
 		*/
+		WorldObject::respawn();
 	}
 
 	void update() override
@@ -103,7 +104,7 @@ class Creature : public WorldObject
 		WorldObject::update();
 
 		// set text1
-		m_text.setString("input:\n"+roundToString(l_input[0],4)+"\n"+roundToString(l_input[1],4));
+		m_text.setString("Health: "+roundToString(health, 4));
 		m_text.setPosition(pos.x+20, pos.y+20);
 		// set text2 
 		m_text2.setString("output:\n"+roundToString(l_output[0],4)+"\n"+roundToString(l_output[2],4));
@@ -132,7 +133,14 @@ class Creature : public WorldObject
 		return v_e;
 	}
 
-
+	sf::Color CalcColor() override
+	{
+		float r = weights2.row(0).mean()*100;
+		float g = weights2.row(1).mean()*100;
+		float b = weights2.row(2).mean()*100;
+		float a = health*255;
+		return sf::Color(r,g,b,a);
+	}
 
 
 	

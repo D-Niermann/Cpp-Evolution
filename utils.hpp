@@ -71,8 +71,8 @@ struct config
 	static constexpr float creatureDecayRate = 0.001;
 	static constexpr float creatureFoodReach = 30;
 
-	static const unsigned int MAX_CREATURES = 10;
-	static const unsigned int MAX_FOOD = 10;
+	static const unsigned int S_CREATURES = 4;
+	static const unsigned int S_FOOD = 10;
 };
 
 

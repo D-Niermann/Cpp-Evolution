@@ -6,7 +6,8 @@ class Food : public WorldObject
   public:
 	Food(sf::Texture &texture, float x, float y, sf::Font& font) : WorldObject(texture, x, y, font) 
 	{
-		m_sprite.setScale(config::foodSpriteScale, config::foodSpriteScale);
+		float rng = random(-0.1,0.1);
+		m_sprite.setScale(config::foodSpriteScale+rng, config::foodSpriteScale+rng);
 		m_sprite.setRotation(random(0,360));
 	}
 

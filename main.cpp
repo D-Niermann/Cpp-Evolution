@@ -1,11 +1,12 @@
 #include <iostream>
 #include <cmath>
-#include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
 #include <memory>
 #include <random>
 #include "Dependencies/eigen/Eigen/Dense"
+#include <SFML/Graphics.hpp>
+#include "SFML/Window/Keyboard.hpp"
 
 
 #include "utils.hpp"
@@ -13,8 +14,8 @@
 #include "Creature.hpp"
 #include "Food.hpp"
 #include "Manager.hpp"
+#include "Plotter.hpp"
 #include "SFML_Display.hpp"
-#include "SFML/Window/Keyboard.hpp"
 
 
 
@@ -26,10 +27,13 @@ int main()
 	// create manager
 	Manager M;
 
+	// create plotters
+	Plotter P(config::WINDOW_X - 300, config::WINDOW_Y - 40);
+
 	// add WorldObjects
-	M.addWorldObject<Creature>(config::MAX_CREATURES, M.creatures, Display.textureCreature, Display.font);
-	M.addWorldObject<Food>(config::MAX_FOOD, M.food, Display.textureFood, Display.font);
+	M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
+	M.addWorldObject<Food>(config::S_FOOD, M.food, Display.textureFood, Display.font);
 
 
-	Display.StartMainLoop(M);
+	Display.StartMainLoop(M, P);
 }

@@ -8,10 +8,14 @@ class SFML_Display
 	sf::RenderWindow m_window;
 	int frame;
 	bool GamePaused;
+	// plotter
+	sf::Sprite spritePlotPoint;
+
 
   public:
 	sf::Texture textureCreature;
 	sf::Texture textureFood;
+	sf::Texture texturePlotPoint;
 	sf::Font font;
 
 
@@ -27,6 +31,14 @@ class SFML_Display
 		{
 			throw("Error");
 		}
+		//load plotpoint textures
+		if (!texturePlotPoint.loadFromFile("Images/circle3.png"))
+		{
+			throw("Error");
+		}
+		spritePlotPoint.setTexture(texturePlotPoint);
+		spritePlotPoint.setColor(sf::Color(10,30,230));
+		spritePlotPoint.setScale(0.1,0.1);
 	}
 	
 	void printLog(Manager& M){
@@ -58,7 +70,7 @@ class SFML_Display
 	//deconstructor
 	~SFML_Display() {}
 
-	void StartMainLoop(Manager &M)
+	void StartMainLoop(Manager &M, Plotter &P)
 	{
 
 		// main loop
@@ -91,20 +103,25 @@ class SFML_Display
 
 			}
 
-			// print log
-			if (frame % 60 == 0){
-				printLog(M);
-			}
-
 			// update all instances in the game world
 			if (!GamePaused)
 			{
+				// update all creatures and food
 				M.updateAll();
 				
-				// check reproduction
+				// check reproduction and print log
 				if (frame % 60 == 0){
 					M.reproduceCreatures(textureCreature, font);
+					// M.reproduceFood(textureFood, font);
+					// print log
+					printLog(M);
+
+					// update plots
+					P.addNewPoint(M.getAvHealth());
+					P.update();
 				}
+					
+
 			}
 
 			//Draw stuff
@@ -128,7 +145,17 @@ class SFML_Display
 				// debug text
 				for (int t = 0; t<2; t++){
 					m_window.draw(M.creatures[i].getText(t));
+					m_window.draw(P.verticesXAxis, 2, sf::Lines);
+					m_window.draw(P.verticesYAxis, 2, sf::Lines);
 				}
+			}
+
+			position pos;
+			for (int i = 0; i<P.getSize(); i++){
+				// draw a sprite on each position
+				pos = P.getData(i);
+				spritePlotPoint.setPosition(pos.x, pos.y);
+				m_window.draw(spritePlotPoint);
 			}
 
 			// display all stuff

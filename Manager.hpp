@@ -4,6 +4,7 @@ class Manager
 	protected:
 
 		Creature* best_creature;
+		float av_health;
 
 	public:
 		// plant  creatures
@@ -53,6 +54,9 @@ class Manager
 				// creature loop	
 				float closest_distance = 10000;
 				int save_j = -1;
+
+				// update collection vars
+				av_health += creatures[i].getHealth();
 				
 				for (int j = 0; j<food.size(); j++){
 					// food loop
@@ -101,14 +105,16 @@ class Manager
 					creatures[i].vertices[0] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0,0));
 					creatures[i].vertices[1] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0));
 
-					creature_input.angle = -180;
-					creature_input.dist = 99999;
+					creature_input.angle = 0;
+					creature_input.dist = 0;
 					creatures[i].giveInput(creature_input);
 				}
 
 				if (creatures[i].getScore()>best_score){
 					best_creature = &creatures[i];
 				}
+
+			av_health = av_health/creatures.size();
 				
 				
 			}
@@ -121,8 +127,23 @@ class Manager
 				}
 			}
 		}
+
+		void reproduceFood(sf::Texture& texture, sf::Font& font){
+			// reproduce food
+			for(int i = 0; i<food.size(); i++){
+				int rng = (int)random(-20,20);
+				if (food[i].getLifetime()%60+rng==0 && food[i].getLifetime()>0){
+					addWorldObject<Food>(1,food,texture, font);
+				}
+			}
+		}
+
 		const Creature* getBestCreature(){
 			return best_creature;
+		}
+
+		const float& getAvHealth(){
+			return av_health;
 		}
 
 };

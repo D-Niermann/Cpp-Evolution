@@ -10,6 +10,7 @@ class WorldObject
 
 	//constants
 	float m_DecayRate = 0;
+	const int ID = (int)random(0,1000000);
 	
 	// runtime values
 	position pos;
@@ -36,7 +37,6 @@ class WorldObject
 	{
 		respawn();
 
-		m_sprite.setPosition(x,y);
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 
 		init_text(m_text, font);
@@ -89,7 +89,7 @@ class WorldObject
 		boundaryCheck();
 		m_sprite.setPosition(pos.x,pos.y);
 		m_sprite.setRotation(rot);
-		m_sprite.setColor(sf::Color(255,255,255,health*255));
+		m_sprite.setColor(CalcColor());
 	}
 
 
@@ -107,6 +107,14 @@ class WorldObject
 		health = WorldObject::S_HEALTH;
 		pos = randomPositionInWindow();
 		transformSprite();
+	}
+
+	virtual sf::Color CalcColor(){
+		float r = 255;
+		float g = 255;
+		float b = 255;
+		float a = health*255;
+		return sf::Color(r,g,b,a);
 	}
 
 	const position& getPos() const
@@ -149,6 +157,10 @@ class WorldObject
 
 	virtual int getLifetime(){
 		return lifetime;
+	}
+
+	const int getID() const {
+		return ID;
 	}
 	// // Copy constructor
 	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){
