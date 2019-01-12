@@ -51,6 +51,7 @@ struct NN_Input
 		std::cout << "Distance: " << dist << "," << "Angle: " << angle << std::endl;
 	}
 };
+
 template <typename T>
 void print(T t, std::string message = ""){
 	std::cout << message << " " << t << std::endl;
