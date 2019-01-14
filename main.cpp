@@ -1,12 +1,13 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <iostream>
+#include <fstream>
 #include <memory>
 #include <random>
 #include "Dependencies/eigen/Eigen/Dense"
 #include <SFML/Graphics.hpp>
 #include "SFML/Window/Keyboard.hpp"
+
 
 
 #include "utils.hpp"
@@ -22,6 +23,7 @@
 
 int main()
 {
+	config config;
 	// create the display class for window and main loop
 	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);
 	

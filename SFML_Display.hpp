@@ -48,6 +48,7 @@ class SFML_Display
 		print("Active Plants:\t" + std::to_string(M.food.size()));
 		if (M.getBestCreature()!=NULL)
 			print("Best Creature:\t"+std::to_string(M.getBestCreature() -> getID()));
+		print("\n");
 	}
 
   public:

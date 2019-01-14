@@ -7,7 +7,7 @@ class Manager
 		float av_score;
 
 	public:
-		// plant  creatures
+		// creatures
 		std::vector<Creature> creatures;
 		// food 
 		std::vector<Food> food;
@@ -110,7 +110,8 @@ class Manager
 					creature_input.dist = std::sqrt(square_dist_i);
 					creatures[i].giveInput(creature_input);
 				}
-				else{
+				else
+				{
 					// no plant visible
 					// set creature vertex 
 					creatures[i].vertices[0] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0,0));
@@ -162,6 +163,13 @@ class Manager
 
 		const float& getAvHealth(){
 			return av_score;
+		}
+		
+		~Manager()
+		{
+			
+			if ((*best_creature).getNN().save(best_creature->getID(),config::SAVE_PATH))
+			 print("Saved best Neural Network!");
 		}
 
 };

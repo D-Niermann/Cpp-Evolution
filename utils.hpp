@@ -1,4 +1,4 @@
-# include <iostream>
+
 
 struct position
 {
@@ -75,8 +75,18 @@ struct config
 
 	static const unsigned int S_CREATURES = 4;
 	static const unsigned int S_FOOD = 10;
-};
 
+	static const std::string SAVE_PATH;
+};
+// initialisations for config
+const std::string config::SAVE_PATH ="/Users/Niermann/Documents/C++/Cpp-SFML-Eigen/Saves/";
+
+
+/* 
+
+FUNCTIONS
+
+*/
 
 float random(float low, float high)
 {

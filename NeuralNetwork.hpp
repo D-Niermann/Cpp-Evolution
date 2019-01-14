@@ -5,7 +5,9 @@ class NeuralNetwork
 {
 	private:
 		// mutate factor in percent of the mutated value
-		const float P = 0.1;
+		const float P = 0.25;
+
+		const int n_layers = 3;
 
 		// layers
 		Vector2f l_input;
@@ -98,11 +100,72 @@ class NeuralNetwork
 			return sf::Color(r,g,b,a);
 		}
 
-		void save(int ID, const std::string& path)
+		int save(int ID, const std::string& path)
 		{
+			using namespace std;
 			// make folder with ID name
+			// could use boost here to actually create a folder
 			// save all weights and biases to this folder
+			string fileName;
+			string folderName = path + std::to_string(ID);
+			ofstream myfile;
+
+			fileName = folderName + "_weights1" + ".txt";
+			myfile.open(fileName);
+			myfile << weights1;
+			myfile.close();
+
+			fileName = folderName + "_weights2" + ".txt";
+			myfile.open(fileName);
+			myfile << weights2;
+			myfile.close();
+
+			return 1;
 
 		}
+
+
+		#define MAXBUFSIZE  ((int) 1e6)
+
+		MatrixXd readMatrix(const char *filename)
+		{
+			using namespace std;
+			int cols = 0, rows = 0;
+			double buff[MAXBUFSIZE];
+
+			// Read numbers from file into buffer.
+			ifstream infile;
+			infile.open(filename);
+			while (! infile.eof())
+			{
+				string line;
+				getline(infile, line);
+
+				int temp_cols = 0;
+				stringstream stream(line);
+				while(! stream.eof())
+					stream >> buff[cols*rows+temp_cols++];
+
+				if (temp_cols == 0)
+					continue;
+
+				if (cols == 0)
+					cols = temp_cols;
+
+				rows++;
+			}
+
+			infile.close();
+
+			rows--;
+
+			// Populate matrix with numbers.
+			MatrixXd result(rows,cols);
+			for (int i = 0; i < rows; i++)
+				for (int j = 0; j < cols; j++)
+					result(i,j) = buff[ cols*i+j ];
+
+			return result;
+		};
 
 };
