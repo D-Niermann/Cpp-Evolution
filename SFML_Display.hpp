@@ -44,9 +44,10 @@ class SFML_Display
 	void printLog(Manager& M){
 		print("--- GAME INFO: ---");
 		// print("Frame:" + std::to_string(frame));
-		print("Active Creatures:" + std::to_string(M.creatures.size()));
-		print("Active Plants:" + std::to_string(M.food.size()));
-		print("\n");
+		print("Active Creatures:\t" + std::to_string(M.creatures.size()));
+		print("Active Plants:\t" + std::to_string(M.food.size()));
+		if (M.getBestCreature()!=NULL)
+			print("Best Creature:\t"+std::to_string(M.getBestCreature() -> getID()));
 	}
 
   public:

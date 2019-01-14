@@ -3,23 +3,6 @@
 class Creature : public WorldObject
 {
   protected:
-	NN_Input input_container;
-	// layers
-	Eigen::Vector2f l_input;
-	Eigen::Vector3f l_output;
-	Eigen::VectorXf l_hidden;
-	// weights
-	Eigen::MatrixXf weights1;
-	Eigen::MatrixXf weights2;
-	// bias
-	Eigen::Vector2f b_input;
-	Eigen::Vector3f b_output;
-	Eigen::VectorXf b_hidden;
-	
-	
-	
-
-	position v_e;
 
 	const int n_hidden_units = 3;
 	const int n_input_units = 2;
@@ -28,75 +11,75 @@ class Creature : public WorldObject
 	const float max_move_speed = 2;
 	const float max_rot_speed = 2;
 
-	const float w_init_multiplier = 0.07;
+	int food_eaten = 0;
 
-	void propagate()
-	{
-		// convert input into eigen vector
-		l_input[0] = input_container.dist;
-		l_input[1] = input_container.angle;
 
-		// hidden units
-		l_hidden =  (weights1 * l_input) + b_hidden;
-		l_output =  (weights2 * l_hidden)+ b_output;
-	}	
+	// input container contains all possible input vars from creature
+	NN_Input input_container;
+	
+	// stores all parameters and methods of the neural network
+	NeuralNetwork NN;	
+
+	// this is just a 2d position vector
+	position v_e;
+
+
 
   public:
 	sf::Vertex vertices[2] ;
 	
 
 	// Constructor
-	Creature(sf::Texture &texture, float x, float y, sf::Font& font) : WorldObject(texture, x, y, font)
+	Creature(sf::Texture &texture, float x, float y, sf::Font& font) : 
+		WorldObject(texture, x, y, font), 
+		NN(n_input_units, n_hidden_units, n_output_units)
 	{
-		using namespace Eigen;
-		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
-		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
-
-		respawn();
-
 		
+		// set srpite scale
+		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
+		// set decay rate slightly random
+		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
+		// inits the rest 
+		respawn(position(x,y));
+	}
+	// consttructor for inheritance of parent parameters
+	Creature(sf::Texture &texture, float x, float y, sf::Font& font, Creature* C) : 
+		WorldObject(texture, x, y, font), 
+		// init the neural network with existing one
+		NN(n_input_units, n_hidden_units, n_output_units, C->getNN())
+	{
+		// set srpite scale
+		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
+		// set decay rate slightly random
+		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
+		// inits the rest (set position to the parent creature)
+		respawn(position(x,y));
+		// mutate 
+		NN.mutate();
 	}
 
-	void respawn() override
+	void respawn(position p) override
 	{
-		/*
-		Eigen
-		*/
-		// random init of weights
-		weights1 = weights1.Random(n_hidden_units, n_input_units)*w_init_multiplier;
-		weights2 = weights2.Random(n_output_units, n_hidden_units)*w_init_multiplier;
-		// random init of bias
-		b_hidden = b_hidden.Random(n_hidden_units)*w_init_multiplier;
-		b_output = b_output.Random(n_output_units)*w_init_multiplier;
-		b_output(0) = 0.5;
-		b_output(1) = 0;
-		// weights1.block(1,0,n_hidden_units-1,1) = MatrixXf().Zero(n_hidden_units-1,1);
-		// zero init of visible layers
-		l_input = l_input.Zero(n_input_units);
-		l_output = l_output.Zero(n_output_units);
-		/* Network:
-				o
-		dis	o	o	o = forw speed and dir [-1,1]
-				o	o = unused
-		ang	o	o	o = rot. speed and dir [-1,1]
-				o
-		*/
-		WorldObject::respawn();
+		// call parent respawn
+		WorldObject::respawn(p);
+
+		// do creature specific:
+		food_eaten = 0;
 	}
 
 	void update() override
 	{
 		// calc output of NN
-		propagate();
+		NN.propagate(input_container);
 
 		// forward vector
 		v_e.x = std::cos(rot*3.1415/180);
 		v_e.y = std::sin(rot*3.1415/180);
 
 		// transform
-		pos.x += v_e.x * clamp(l_output[0],-max_move_speed,max_move_speed);
-		pos.y += v_e.y * clamp(l_output[0],-max_move_speed,max_move_speed);
-		rot += clamp(l_output[2],-max_rot_speed,max_rot_speed);
+		pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed);
+		pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed);
+		rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
 		
 
 
@@ -104,11 +87,11 @@ class Creature : public WorldObject
 		WorldObject::update();
 
 		// set text1
-		m_text.setString("Health: "+roundToString(health, 4));
-		m_text.setPosition(pos.x+20, pos.y+20);
+		m_text.setString("ID: "+ std::to_string(ID));
+		m_text.setPosition(pos.x+20, pos.y+10);
 		// set text2 
-		m_text2.setString("output:\n"+roundToString(l_output[0],4)+"\n"+roundToString(l_output[2],4));
-		m_text2.setPosition(pos.x+20, pos.y-20);
+		m_text2.setString("Score: "+roundToString(getScore(),4));
+		m_text2.setPosition(pos.x+20, pos.y);
 
 
 	}
@@ -118,6 +101,7 @@ class Creature : public WorldObject
 	{
 		// gets called externally when collision with food is detected
 		health = S_HEALTH;
+		food_eaten += 1;
 	}
 
 	~Creature()
@@ -135,13 +119,17 @@ class Creature : public WorldObject
 
 	sf::Color CalcColor() override
 	{
-		float r = weights2.row(0).mean()*100;
-		float g = weights2.row(1).mean()*100;
-		float b = weights2.row(2).mean()*100;
-		float a = health*255;
-		return sf::Color(r,g,b,a);
+		return NN.calcColor(health);
 	}
 
+	NeuralNetwork getNN(){
+		return NN;
+	}
+
+	const float& getScore() override {
+		score = health * food_eaten;
+		return score;
+	}
 
 	
 };

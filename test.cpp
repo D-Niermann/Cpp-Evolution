@@ -89,7 +89,9 @@ int main()
 	Eigen::Vector2f in;
 	
 	m = m.Random(5,2);
-
+	for (int i =0; i< 10; i++){
+		print((int)random(0,2));
+	}
 	print(m.block(1,0,4,1));
 	return 0;
 }

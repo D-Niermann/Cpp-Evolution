@@ -52,6 +52,7 @@ struct NN_Input
 	}
 };
 
+
 template <typename T>
 void print(T t, std::string message = ""){
 	std::cout << message << " " << t << std::endl;

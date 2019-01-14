@@ -4,7 +4,7 @@ class Manager
 	protected:
 
 		Creature* best_creature;
-		float av_health;
+		float av_score;
 
 	public:
 		// plant  creatures
@@ -22,6 +22,17 @@ class Manager
 			for (int i = 0; i < count; i++)
 			{
 				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m), font) );
+			}
+		}
+		template < class T >
+		void reproduceWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture, sf::Font& font, T* parent)
+		{
+			// redefine variable for shorter code line
+			int m = config::worldMargin;
+			// add all class instances of type T to the save vector
+			for (int i = 0; i < count; i++)
+			{
+				saveVector.emplace_back( T(texture, parent->getPos().x, parent->getPos().y, font, parent) );
 			}
 		}
 
@@ -56,7 +67,7 @@ class Manager
 				int save_j = -1;
 
 				// update collection vars
-				av_health += creatures[i].getHealth();
+				av_score += creatures[i].getScore();
 				
 				for (int j = 0; j<food.size(); j++){
 					// food loop
@@ -70,7 +81,7 @@ class Manager
 					if (std::sqrt(square_dist_i) < config::creatureFoodReach)
 					{
 						creatures[i].eat();
-						food[j].respawn();
+						food[j].respawn(randomPositionInWindow());
 					}
 
 					// check if closest food is food j
@@ -112,24 +123,31 @@ class Manager
 
 				if (creatures[i].getScore()>best_score){
 					best_creature = &creatures[i];
+					best_score = creatures[i].getScore();
 				}
 
-			av_health = av_health/creatures.size();
+			av_score = av_score/creatures.size();
 				
 				
 			}
 		}
+		
+		
 		void reproduceCreatures(sf::Texture& texture, sf::Font& font){
 			// reproduce
+			float x,y;
 			for(int i = 0; i<creatures.size(); i++){
 				if (creatures[i].getLifetime()%500==0 && creatures[i].getLifetime()>0){
-					addWorldObject<Creature>(1,creatures,texture, font);
+					x = clamp(creatures[i].getPos().x + random(-1,1), 0+config::worldMargin, config::WINDOW_X - config::worldMargin);
+					y = clamp(creatures[i].getPos().y + random(-1,1), 0+config::worldMargin, config::WINDOW_Y - config::worldMargin);
+					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
 				}
 			}
 		}
 
 		void reproduceFood(sf::Texture& texture, sf::Font& font){
 			// reproduce food
+			float x,y;
 			for(int i = 0; i<food.size(); i++){
 				int rng = (int)random(-20,20);
 				if (food[i].getLifetime()%60+rng==0 && food[i].getLifetime()>0){
@@ -143,7 +161,7 @@ class Manager
 		}
 
 		const float& getAvHealth(){
-			return av_health;
+			return av_score;
 		}
 
 };

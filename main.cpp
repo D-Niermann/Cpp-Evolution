@@ -10,6 +10,7 @@
 
 
 #include "utils.hpp"
+#include "NeuralNetwork.hpp"
 #include "WorldObject.hpp"
 #include "Creature.hpp"
 #include "Food.hpp"

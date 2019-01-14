@@ -10,7 +10,7 @@ class WorldObject
 
 	//constants
 	float m_DecayRate = 0;
-	const int ID = (int)random(0,1000000);
+	const int ID = (int)random(0,10000);
 	
 	// runtime values
 	position pos;
@@ -33,9 +33,9 @@ class WorldObject
 
   public:
 	// Constructor
-	WorldObject(sf::Texture& texture, float x, float y, sf::Font& font) : m_sprite(texture), pos(x, y) 
+	WorldObject(sf::Texture& texture, float x, float y, sf::Font& font) : m_sprite(texture)
 	{
-		respawn();
+		respawn(position(x,y));
 
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 
@@ -96,16 +96,16 @@ class WorldObject
 	void respawnCheck(){
 		if (health <= 0)
 		{
-			respawn();
+			respawn(randomPositionInWindow());
 		}
 	}
 
-	virtual void respawn()
+	virtual void respawn(position p)
 	{
 		rot = WorldObject::S_ROTATION;
 		lifetime = WorldObject::S_LIFETIME;
 		health = WorldObject::S_HEALTH;
-		pos = randomPositionInWindow();
+		pos = p;
 		transformSprite();
 	}
 
