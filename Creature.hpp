@@ -4,12 +4,12 @@ class Creature : public WorldObject
 {
   protected:
 
-	const int n_hidden_units = 3;
-	const int n_input_units = 2;
-	const int n_output_units = 3;
+	static const int n_hidden_units = 3;
+	static const int n_input_units = 2;
+	static const int n_output_units = 3;
 
-	const float max_move_speed = 2;
-	const float max_rot_speed = 2;
+	static constexpr float max_move_speed = 2;
+	static constexpr float max_rot_speed = 2;
 
 	int food_eaten = 0;
 
@@ -23,11 +23,12 @@ class Creature : public WorldObject
 	// this is just a 2d position vector
 	position v_e;
 
-
+	void calcScore() override{
+		score = health * food_eaten;
+	}
 
   public:
 	sf::Vertex vertices[2] ;
-	
 
 	// Constructor
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font) : 
@@ -54,8 +55,27 @@ class Creature : public WorldObject
 		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
 		// inits the rest (set position to the parent creature)
 		respawn(position(x,y));
+		// take over the food_eaten score
+		food_eaten = C->food_eaten;
 		// mutate 
-		NN.mutate();
+		NN.mutateW();
+		NN.mutateB();
+	}
+	// consttructor for loading of parameters from file
+	Creature(sf::Texture &texture, float x, float y, sf::Font& font, const std::string load_id) : 
+		WorldObject(texture, x, y, font), 
+		// init the neural network with existing one
+		NN(n_input_units, n_hidden_units, n_output_units, load_id)
+	{
+		// set srpite scale
+		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
+		// set decay rate slightly random
+		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
+		// inits the rest (set position to the parent creature)
+		respawn(position(x,y));
+		// mutate 
+		NN.mutateW();
+		NN.mutateB();
 	}
 
 	void respawn(position p) override
@@ -80,6 +100,7 @@ class Creature : public WorldObject
 		pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed);
 		pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed);
 		rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
+
 		
 
 
@@ -90,7 +111,7 @@ class Creature : public WorldObject
 		m_text.setString("ID: "+ std::to_string(ID));
 		m_text.setPosition(pos.x+20, pos.y+10);
 		// set text2 
-		m_text2.setString("Score: "+roundToString(getScore(),4));
+		m_text2.setString("Score: "+roundToString(score,3));
 		m_text2.setPosition(pos.x+20, pos.y);
 
 
@@ -126,10 +147,12 @@ class Creature : public WorldObject
 		return NN;
 	}
 
-	const float& getScore() override {
-		score = health * food_eaten;
+	const float& getScore() const override{
 		return score;
 	}
 
+	const NN_Input& getInput() const {
+		return input_container;
+	}
 	
 };

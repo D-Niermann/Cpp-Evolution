@@ -60,26 +60,34 @@ void print(T t, std::string message = ""){
 
 struct config
 {
+	// window specific
 	static const unsigned int FRAMERATE = 60;
 	static const bool VSYNC = true;
-	static const unsigned int WINDOW_X = 1000;
-	static const unsigned int WINDOW_Y = 500;
+	static const unsigned int WINDOW_X = 1200;
+	static const unsigned int WINDOW_Y = 800;
 	static const unsigned int TEXTSIZE = 12;
 
 	static constexpr float foodSpriteScale = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
 	static const int worldMargin = 20;
 
+	// world object specific
 	static constexpr float creatureDecayRate = 0.001;
 	static constexpr float creatureFoodReach = 30;
+	static const int REPRO_TIME = 500;
 
 	static const unsigned int S_CREATURES = 4;
+	static const unsigned int MAX_CREATURES = 10;
 	static const unsigned int S_FOOD = 10;
 
+	// loading and saving
+	static const bool INIT_LOAD = true;
 	static const std::string SAVE_PATH;
+	static const std::string LOAD_ID;
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="/Users/Niermann/Documents/C++/Cpp-SFML-Eigen/Saves/";
+const std::string config::LOAD_ID = "236443"; //862348 best, 236443 very best
 
 
 /* 
@@ -136,3 +144,51 @@ float clamp(float x, float min, float max)
 	}
 	return x;
 }
+
+// stupid implementation per 
+void clamp(Eigen::VectorXf& M, float min, float max)
+{
+	for(int i= 0; i < M.rows(); i++){
+		for (int j = 0; j< M.cols(); j++){
+			if (M(i,j) > max){
+				M(i,j) = max;
+			}
+			else if (M(i,j) < min){
+				M(i,j) = min;
+			}
+			
+		}
+	}
+}
+/*
+// implementation through ...
+void clamp(Eigen::MatrixXf& M, float min, float max)
+{
+	for(int i= 0; i < M.rows(); i++){
+		for (int j = 0; j< M.cols(); j++){
+			if (M(i,j) > max){
+				M(i,j) = max;
+			}
+			else if (M(i,j) < min){
+				M(i,j) = min;
+			}
+			
+		}
+	}
+}
+// implementation though iterator
+void clamp(Eigen::MatrixXf& M, float min, float max)
+{
+	for(int i= 0; i < M.rows(); i++){
+		for (int j = 0; j< M.cols(); j++){
+			if (M(i,j) > max){
+				M(i,j) = max;
+			}
+			else if (M(i,j) < min){
+				M(i,j) = min;
+			}
+			
+		}
+	}
+}
+*/

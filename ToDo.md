@@ -1,11 +1,17 @@
 TODO:
 
-	- implement all eigen parameters through a struct
-		- write get and set methods for this struct
-		- use it to reproduce new creature with the same weights
-		- save function
 
-	- save function to save the eigen parameters and call it on the best creature at the window exit SFML 
-	- custom iterators read and learn
+
+	- load NN function
+	
 	- click on creature saves the parameters under the ID name
+	
 	- use boost to create new folder
+
+	- limit the amount of creatures, delete worst creatures ( custom sort function that sorts after score?)
+
+	- write own 'iterator' ? list of pointers to all relevant class members that can be iterated over
+
+	- dont switch values to 0 instantly if creature doesnt see the food
+
+	- **mutateB**

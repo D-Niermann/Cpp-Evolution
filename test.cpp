@@ -84,14 +84,13 @@ int main()
 	// 	v[i].info();
 	// }
 
-	Eigen::MatrixXf m;
-	Eigen::Vector3f out;
-	Eigen::Vector2f in;
+	// Eigen::MatrixXf m;
+	// Eigen::Vector3f out;
+	// Eigen::Vector2f in;
 	
-	m = m.Random(5,2);
-	for (int i =0; i< 10; i++){
-		print((int)random(0,2));
-	}
-	print(m.block(1,0,4,1));
+	// m = m.Random(5,2);
+	
+	// m(0,0) = 1;
+	// print(m);
 	return 0;
 }

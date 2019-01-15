@@ -10,7 +10,7 @@ class WorldObject
 
 	//constants
 	float m_DecayRate = 0;
-	const int ID = (int)random(0,10000);
+	int ID = (int)random(0,981239);
 	
 	// runtime values
 	position pos;
@@ -29,6 +29,10 @@ class WorldObject
 		float h;
 		h = this->health-m_DecayRate;
 		health = h;
+	}
+
+	virtual void calcScore(){
+		score = health;
 	}
 
   public:
@@ -54,6 +58,7 @@ class WorldObject
 	{
 		lifetime += 1;
 		calcHealth();
+		calcScore();
 		respawnCheck();
 		transformSprite();
 	}
@@ -145,17 +150,16 @@ class WorldObject
 		}
 	}
 
-	const float& getHealth()
+	const float& getHealth() const
 	{ 
 		return health;
 	}
 
-	const virtual float& getScore(){
-		score = health;
+	const virtual float& getScore() const {
 		return score;
 	}
 
-	virtual int getLifetime(){
+	virtual int getLifetime() const{
 		return lifetime;
 	}
 
@@ -164,5 +168,8 @@ class WorldObject
 	}
 	// // Copy constructor
 	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){
-
+	bool operator<(WorldObject const &rhs) const
+	{ return score < rhs.score; }
+	bool operator>(WorldObject const &rhs) const
+	{ return score > rhs.score; }
 };

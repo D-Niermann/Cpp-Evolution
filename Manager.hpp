@@ -12,6 +12,7 @@ class Manager
 		// food 
 		std::vector<Food> food;
 	
+	
 		// add class to given array
 		template < class T >
 		void addWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture, sf::Font& font)
@@ -24,6 +25,21 @@ class Manager
 				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m), font) );
 			}
 		}
+		// overload with load id that tells what file to load the NN from
+		template < class T >
+		void addWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture, sf::Font& font, const std::string& load_id)
+		{
+			// redefine variable for shorter code line
+			int m = config::worldMargin;
+			// add all class instances of type T to the save vector
+			for (int i = 0; i < count; i++)
+			{
+				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m), font, load_id) );
+			}
+		}
+
+
+
 		template < class T >
 		void reproduceWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture, sf::Font& font, T* parent)
 		{
@@ -37,7 +53,7 @@ class Manager
 		}
 
 
-		void updateAll()
+		void updateAll(const int& frame)
 		{
 			// updates all creatures
 			for(int i = 0; i<creatures.size(); i++){
@@ -47,8 +63,9 @@ class Manager
 			for(int i = 0; i<food.size(); i++){
 				food[i].update();
 			}
-
-			CollisionCheckAndCreatureInput();
+			
+			if (frame%5 == 0)
+				CollisionCheckAndCreatureInput();
 
 		}
 
@@ -118,7 +135,7 @@ class Manager
 					creatures[i].vertices[1] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0));
 
 					creature_input.angle = 0;
-					creature_input.dist = 0;
+					creature_input.dist = 100000;
 					creatures[i].giveInput(creature_input);
 				}
 
@@ -133,21 +150,48 @@ class Manager
 			}
 		}
 		
+		template <typename T>
+		void cull(std::vector<T>& v)
+		{
+			// get all scores
+			std::vector<float> scores;
+			float threshold;
+			unsigned int cull_count;
+
+			for (const T& item : v){
+				scores.push_back(item.getScore());
+			
+			}
+			// sort the vector
+			std::sort(scores.begin(),scores.end());
 		
-		void reproduceCreatures(sf::Texture& texture, sf::Font& font){
-			// reproduce
-			float x,y;
-			for(int i = 0; i<creatures.size(); i++){
-				if (creatures[i].getLifetime()%500==0 && creatures[i].getLifetime()>0){
-					x = clamp(creatures[i].getPos().x + random(-1,1), 0+config::worldMargin, config::WINDOW_X - config::worldMargin);
-					y = clamp(creatures[i].getPos().y + random(-1,1), 0+config::worldMargin, config::WINDOW_Y - config::worldMargin);
-					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
+			// calc the threshold value
+			cull_count = v.size() - config::MAX_CREATURES;
+			threshold = scores[cull_count];	
+			print(threshold,"Culling below");
+
+			// if score below threshold erase the creatue
+			for (int i = 0; i < v.size(); i++){
+				if (v[i].getScore() <= threshold){
+					v.erase(v.begin()+i);
 				}
 			}
 		}
+		
+		void reproduceCreatures(sf::Texture& texture, sf::Font& font)
+		{
+			for(int i = 0; i<creatures.size(); i++)
+			{
+				if (creatures[i].getLifetime()%config::REPRO_TIME==0 && creatures[i].getLifetime()>0)
+				{
+					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
+				}
+			}
+			if (creatures.size() > config::MAX_CREATURES)
+				cull(creatures);
+		}
 
 		void reproduceFood(sf::Texture& texture, sf::Font& font){
-			// reproduce food
 			float x,y;
 			for(int i = 0; i<food.size(); i++){
 				int rng = (int)random(-20,20);

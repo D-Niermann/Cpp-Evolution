@@ -23,7 +23,6 @@
 
 int main()
 {
-	config config;
 	// create the display class for window and main loop
 	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);
 	
@@ -34,8 +33,18 @@ int main()
 	Plotter P(config::WINDOW_X - 300, config::WINDOW_Y - 40);
 
 	// add WorldObjects
-	M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
+	// creatures, either init them randomly or load them from file
+	if (!config::INIT_LOAD){
+		print("Random init of creatures!");
+		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
+	}
+	else{
+		print("Loading from file!");
+		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font, config::LOAD_ID);
+	}
+	// food
 	M.addWorldObject<Food>(config::S_FOOD, M.food, Display.textureFood, Display.font);
+
 
 
 	Display.StartMainLoop(M, P);

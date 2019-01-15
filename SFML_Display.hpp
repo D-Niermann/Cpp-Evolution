@@ -44,7 +44,7 @@ class SFML_Display
 	void printLog(Manager& M){
 		print("--- GAME INFO: ---");
 		// print("Frame:" + std::to_string(frame));
-		print("Active Creatures:\t" + std::to_string(M.creatures.size()));
+		print("Active Creatures:\t" + std::to_string(M.creatures.size()) + "/" + roundToString(config::MAX_CREATURES,3));
 		print("Active Plants:\t" + std::to_string(M.food.size()));
 		if (M.getBestCreature()!=NULL)
 			print("Best Creature:\t"+std::to_string(M.getBestCreature() -> getID()));
@@ -109,14 +109,15 @@ class SFML_Display
 			if (!GamePaused)
 			{
 				// update all creatures and food
-				M.updateAll();
+				M.updateAll(frame);
 				
 				// check reproduction and print log
-				if (frame % 60 == 0){
+				if (frame % 60 == 0 and frame>0){
 					M.reproduceCreatures(textureCreature, font);
 					// M.reproduceFood(textureFood, font);
 					// print log
 					printLog(M);
+
 
 					// update plots
 					P.addNewPoint(M.getAvHealth());
@@ -143,13 +144,15 @@ class SFML_Display
 				DEBUG DRAW
 				*/
 				// draw debug lines
-				m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
+					// m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
 				// debug text
-				for (int t = 0; t<2; t++){
-					m_window.draw(M.creatures[i].getText(t));
+					// for (int t = 0; t<2; t++){
+					// 	m_window.draw(M.creatures[i].getText(t));
+
+				// draw plot lines
 					m_window.draw(P.verticesXAxis, 2, sf::Lines);
 					m_window.draw(P.verticesYAxis, 2, sf::Lines);
-				}
+				// }
 			}
 
 			position pos;
