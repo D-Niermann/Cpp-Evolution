@@ -42,6 +42,7 @@ class WorldObject
 		respawn(position(x,y));
 
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+		texture.setSmooth(true);
 
 		init_text(m_text, font);
 		init_text(m_text2, font);

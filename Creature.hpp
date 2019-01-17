@@ -33,6 +33,15 @@ class Creature : public WorldObject
 		h = this -> health - (m_DecayRate * clamp(NN.getOutput()[1],0.5,2));
 		health = h;
 	}
+
+	void updateV_e()
+	{
+		// forward vector
+		v_e.x = std::cos(rot*3.1415/180);
+		v_e.y = std::sin(rot*3.1415/180);
+	}
+
+
   public:
 	sf::Vertex vertices[2] ;
 
@@ -98,16 +107,12 @@ class Creature : public WorldObject
 		// calc output of NN
 		NN.propagate(input_container);
 
-		// forward vector
-		v_e.x = std::cos(rot*3.1415/180);
-		v_e.y = std::sin(rot*3.1415/180);
+		updateV_e();
 
 		// transform
 		pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
 		pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
 		rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
-
-				
 
 
 		// base class update call
@@ -117,7 +122,7 @@ class Creature : public WorldObject
 		m_text.setString("ID: "+ std::to_string(ID));
 		m_text.setPosition(pos.x+20, pos.y+10);
 		// set text2 
-		m_text2.setString("Lifetime: "+roundToString(lifetime%config::REPRO_TIME,4));
+		m_text2.setString("Out: "+roundToString(NN.getOutput()[1],4));
 		m_text2.setPosition(pos.x+20, pos.y);
 
 

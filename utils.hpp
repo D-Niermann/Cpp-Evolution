@@ -74,7 +74,7 @@ struct config
 	// world object specific
 	static constexpr float creatureDecayRate = 0.001;
 	static constexpr float creatureFoodReach = 30;
-	static const int REPRO_TIME = 8*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
+	static const int REPRO_TIME = 12*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
 
 	static const unsigned int S_CREATURES = 4;
 	static const unsigned int MAX_CREATURES = 10;
@@ -87,7 +87,7 @@ struct config
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="/Users/Niermann/Documents/C++/Cpp-SFML-Eigen/Saves/";
-const std::string config::LOAD_ID = "51613"; //862348 best, 236443 very best, 51613 best with boost
+const std::string config::LOAD_ID = "236443"; //862348 best, 236443 very best, 51613 best with boost
 
 
 /* 

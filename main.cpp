@@ -7,7 +7,7 @@
 #include "Dependencies/eigen/Eigen/Dense"
 #include <SFML/Graphics.hpp>
 #include "SFML/Window/Keyboard.hpp"
-
+#include <SFML/Window/ContextSettings.hpp>
 
 
 #include "utils.hpp"
@@ -23,9 +23,10 @@
 
 int main()
 {
+	sf::ContextSettings(0,0,4);
 
 	srand(2);
-	
+
 	// create the display class for window and main loop
 	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);
 	
