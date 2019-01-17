@@ -11,12 +11,15 @@ class WorldObject
 	//constants
 	float m_DecayRate = 0;
 	int ID = (int)random(0,981239);
+	std::string type_str;
 	
 	// runtime values
 	position pos;
 	int lifetime;
 	float health;
 	float score;
+	bool is_alive;
+
 	// rotation
 	float rot;
 	// references to sfml stuff
@@ -40,6 +43,7 @@ class WorldObject
 	WorldObject(sf::Texture& texture, float x, float y, sf::Font& font) : m_sprite(texture)
 	{
 		respawn(position(x,y));
+		is_alive = 1;
 
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 		texture.setSmooth(true);
@@ -58,10 +62,11 @@ class WorldObject
 	virtual void update()
 	{
 		lifetime += 1;
-		calcHealth();
-		calcScore();
-		respawnCheck();
-		transformSprite();
+		if (is_alive)
+			calcHealth();
+			calcScore();
+			aliveCheck();
+			transformSprite();
 	}
 
 	void boundaryCheck(){
@@ -89,6 +94,9 @@ class WorldObject
 		if (rot > 360){
 			rot = 0;
 		}
+
+		// limit health
+		health = clamp(health,0,1);
 	}
 
 	void transformSprite(){
@@ -99,10 +107,10 @@ class WorldObject
 	}
 
 
-	void respawnCheck(){
+	void aliveCheck(){
 		if (health <= 0)
 		{
-			respawn(randomPositionInWindow());
+			is_alive = false;
 		}
 	}
 
@@ -112,6 +120,7 @@ class WorldObject
 		lifetime = WorldObject::S_LIFETIME;
 		health = WorldObject::S_HEALTH;
 		pos = p;
+		is_alive = true;
 		transformSprite();
 	}
 
@@ -167,6 +176,15 @@ class WorldObject
 	const int getID() const {
 		return ID;
 	}
+
+	const bool isAlive() const {
+		return is_alive;
+	}
+
+	const virtual std::string& type() const {
+		return type_str;
+	}
+
 	// // Copy constructor
 	// WorldObject(const WorldObject& other): m_window(other.m_window), m_sprite(other.m_sprite), pos(other.pos){
 	bool operator<(WorldObject const &rhs) const

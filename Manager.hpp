@@ -11,6 +11,8 @@ class Manager
 		std::vector<Creature> creatures;
 		// food 
 		std::vector<Food> food;
+		// hunters
+		std::vector<Creature> hunters;
 	
 	
 		// add class to given array
@@ -98,7 +100,7 @@ class Manager
 					if (std::sqrt(square_dist_i) < config::creatureFoodReach)
 					{
 						creatures[i].eat();
-						food[j].respawn(randomPositionInWindow());
+						food.erase(food.begin()+j);
 					}
 
 					// check if closest food is food j
@@ -150,6 +152,7 @@ class Manager
 			}
 		}
 		
+		// depricated, culls all creatures in v that are below an score threshold so that the MAX_creatures count is reached again
 		template <typename T>
 		void cull(std::vector<T>& v)
 		{
@@ -177,25 +180,53 @@ class Manager
 				}
 			}
 		}
+
+		// cleans all corpses (deletes them), if creature count is less than Min creatures , respawn them instean
+		template <typename T>
+		void cleanDeads(std::vector<T>& container){
+			int min_worldObj;
+
+			// if (container.type() == "Creature"){
+			// 	min_worldObj = config::S_CREATURES;	
+			// }
+			// else if (container.type() == "Hunter"){
+			// 	min_worldObj = config::S_HUNTERS;
+			// }
+
+			for (int i = 0; i<container.size(); i++){
+				if (!container[i].isAlive())
+				{
+					if (config::S_CREATURES < container.size()){
+						container.erase(container.begin()+i);
+					}
+					else{
+						container[i].respawn(randomPositionInWindow());
+					}
+				}
+			}
+		}
 		
 		void reproduceCreatures(sf::Texture& texture, sf::Font& font)
 		{
 			for(int i = 0; i<creatures.size(); i++)
 			{
-				if (creatures[i].getLifetime()%config::REPRO_TIME==0 && creatures[i].getLifetime()>0)
+				if (creatures[i].getLifetime()%config::REPRO_TIME==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)
 				{
 					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
 				}
 			}
-			if (creatures.size() > config::MAX_CREATURES)
-				cull(creatures);
+			// if (creatures.size() > config::MAX_CREATURES)
+			// 	cull(creatures);
+			cleanDeads(creatures);
 		}
 
 		void reproduceFood(sf::Texture& texture, sf::Font& font){
 			float x,y;
+			if (food.size()<config::S_FOOD){
+				addWorldObject<Food>(2, food, texture, font);
+			}
 			for(int i = 0; i<food.size(); i++){
-				int rng = (int)random(-20,20);
-				if (food[i].getLifetime()%60+rng==0 && food[i].getLifetime()>0){
+				if (food[i].getLifetime()%50==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD){
 					addWorldObject<Food>(1,food,texture, font);
 				}
 			}
@@ -211,9 +242,11 @@ class Manager
 		
 		~Manager()
 		{
-			
-			if ((*best_creature).getNN().save(best_creature->getID(),config::SAVE_PATH))
-			 print("Saved best Neural Network!");
+			if (config::DO_SAVE)
+				if (
+					(*best_creature).getNN().save(best_creature->getID(),config::SAVE_PATH)
+					)
+					print("Saved best Neural Network!");
 		}
 
 };

@@ -72,22 +72,26 @@ struct config
 	static const int worldMargin = 20;
 
 	// world object specific
-	static constexpr float creatureDecayRate = 0.001;
+	static constexpr float creatureDecayRate = 0.002;
 	static constexpr float creatureFoodReach = 30;
 	static const int REPRO_TIME = 12*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
 
-	static const unsigned int S_CREATURES = 4;
+	static const unsigned int S_CREATURES = 10;
 	static const unsigned int MAX_CREATURES = 10;
-	static const unsigned int S_FOOD = 3;
+	static const unsigned int S_FOOD = 6;
+	static const unsigned int MAX_FOOD = 10;
+	static const unsigned int S_HUNTERS = 1;
 
 	// loading and saving
 	static const bool INIT_LOAD = true;
 	static const std::string SAVE_PATH;
 	static const std::string LOAD_ID;
+	static const bool DO_SAVE = true;
+	static const bool DO_PRINTLOG = false;
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="/Users/Niermann/Documents/C++/Cpp-SFML-Eigen/Saves/";
-const std::string config::LOAD_ID = "236443"; //862348 best, 236443 very best, 51613 best with boost
+const std::string config::LOAD_ID = "438999"; //862348 best, 236443 very best, 51613 best with boost
 
 
 /* 

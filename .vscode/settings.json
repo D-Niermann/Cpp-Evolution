@@ -6,6 +6,7 @@
 		"vector": "cpp",
 		"__config": "cpp",
 		"cmath": "cpp",
-		"complex": "cpp"
+		"complex": "cpp",
+		"typeinfo": "cpp"
 	}
 }

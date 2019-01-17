@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include "SFML/Window/Keyboard.hpp"
 #include <SFML/Window/ContextSettings.hpp>
+#include <typeinfo>
 
 
 #include "utils.hpp"
@@ -23,7 +24,7 @@
 
 int main()
 {
-	sf::ContextSettings(0,0,4);
+	// sf::ContextSettings(0,0,4);
 
 	srand(2);
 

@@ -5,7 +5,8 @@ class Plotter
 	protected:
 		position origin;
 		const float xScale = 1;
-		const float yScale = 10;
+		const float yScale = 100;
+		const float yoffset = 2;
 		const float xEnd = config::WINDOW_X-20;
 		const float x_spacing = 2;
 		std::vector<position> m_data;
@@ -45,11 +46,11 @@ class Plotter
 
 		void addNewPoint(const position& p)
 		{
-			m_data.emplace_back(position(origin.x + p.x, origin.y - p.y*yScale));
+			m_data.emplace_back(position(origin.x + p.x, origin.y - yoffset - p.y*yScale));
 		}
 		void addNewPoint(float y)
 		{
-			m_data.emplace_back(position(xEnd, origin.y - y * yScale));
+			m_data.emplace_back(position(xEnd, origin.y - yoffset - y * yScale));
 		}
 
 		std::vector<position>& getData(){

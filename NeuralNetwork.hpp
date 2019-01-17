@@ -5,7 +5,7 @@ class NeuralNetwork
 {
 	private:
 		// mutate factor in percent of the mutated value
-		static constexpr float P = 5;
+		static constexpr float P = 1;
 
 		const static int n_layers = 3;
 
@@ -30,7 +30,7 @@ class NeuralNetwork
 				o
 		*/
 
-		float w_init_multiplier = 0.1;
+		float w_init_multiplier = 0.2;
 
 	public:
 		NeuralNetwork(int n_input, int n_hidden, int n_output) : n_input(n_input), n_hidden(n_hidden), n_output(n_output)
@@ -42,7 +42,7 @@ class NeuralNetwork
 			b_hidden = b_hidden.Random(n_hidden)*w_init_multiplier;
 			b_output = b_output.Random(n_output)*w_init_multiplier;
 			b_input = b_input.Random(n_input)*w_init_multiplier;
-			b_output(0) = 0.5;
+			b_output(0) = 0.1;
 			// weights1.block(1,0,n_hidden_units-1,1) = MatrixXf().Zero(n_hidden_units-1,1);
 			// zero init of visible layers
 			l_input = l_input.Zero(n_input);
@@ -147,7 +147,8 @@ class NeuralNetwork
 			float r = 255 - std::abs(weights1.row(0).mean())*100;
 			float g = 255 - std::abs(weights1.row(1).mean())*100;
 			float b = 255 - std::abs(weights1.row(2).mean())*100;
-			float a = f*255;
+			float a = clamp(f*255,20,255);
+
 			return sf::Color(r,g,b,a);
 		}
 

@@ -16,13 +16,14 @@ class SFML_Display
 	sf::Texture textureCreature;
 	sf::Texture textureFood;
 	sf::Texture texturePlotPoint;
+	sf::Texture textureHunter;
 	sf::Font font;
 
 
 	void loadTextures()
 	{
 		// load creature texture
-		if (!textureCreature.loadFromFile("Images/circle3.png"))
+		if (!textureCreature.loadFromFile("Images/creatureSprite.png"))
 		{
 			throw("Error");
 		}
@@ -32,7 +33,12 @@ class SFML_Display
 			throw("Error");
 		}
 		//load plotpoint textures
-		if (!texturePlotPoint.loadFromFile("Images/circle3.png"))
+		if (!texturePlotPoint.loadFromFile("Images/creatureSprite.png"))
+		{
+			throw("Error");
+		}
+		// load hunter texture
+		if (!texturePlotPoint.loadFromFile("Images/hunterSprite.png"))
 		{
 			throw("Error");
 		}
@@ -42,13 +48,16 @@ class SFML_Display
 	}
 	
 	void printLog(Manager& M){
-		print("--- GAME INFO: ---");
-		// print("Frame:" + std::to_string(frame));
-		print("Active Creatures:\t" + std::to_string(M.creatures.size()) + "/" + roundToString(config::MAX_CREATURES,3));
-		print("Active Plants:\t" + std::to_string(M.food.size()));
-		if (M.getBestCreature()!=NULL)
-			print("Best Creature:\t"+std::to_string(M.getBestCreature() -> getID()));
-		print("\n");
+		if (config::DO_PRINTLOG)
+		{
+			print("--- GAME INFO: ---");
+			// print("Frame:" + std::to_string(frame));
+			print("Active Creatures:\t" + std::to_string(M.creatures.size()) + "/" + roundToString(config::MAX_CREATURES,3));
+			print("Active Plants:\t" + std::to_string(M.food.size()));
+			if (M.getBestCreature()!=NULL)
+				print("Best Creature:\t"+std::to_string(M.getBestCreature() -> getID()));
+			print("\n");
+		}
 	}
 
   public:
@@ -114,8 +123,9 @@ class SFML_Display
 				// check reproduction and print log
 				if (frame % 60 == 0 and frame>0){
 					M.reproduceCreatures(textureCreature, font);
-					// M.reproduceFood(textureFood, font);
+					M.reproduceFood(textureFood, font);
 					// print log
+					
 					printLog(M);
 
 

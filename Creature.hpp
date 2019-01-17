@@ -10,6 +10,7 @@ class Creature : public WorldObject
 
 	static constexpr float max_move_speed = 2;
 	static constexpr float max_rot_speed = 2;
+	static constexpr float eps = 0.0001;
 
 	int food_eaten = 0;
 
@@ -24,13 +25,13 @@ class Creature : public WorldObject
 	position v_e;
 
 	void calcScore() override{
-		score = health * food_eaten;
+		score = food_eaten/((lifetime+eps)/600);
 	}
 
 	void calcHealth() override{ 
 		// decr health if boost (NN output[1]) is higher than 1, but save health if boost is lower 1
 		float h;
-		h = this -> health - (m_DecayRate * clamp(NN.getOutput()[1],0.5,2));
+		h = this -> health - (m_DecayRate * std::pow(clamp(NN.getOutput()[1],0.5,2),2));
 		health = h;
 	}
 
@@ -71,7 +72,7 @@ class Creature : public WorldObject
 		// inits the rest (set position to the parent creature)
 		respawn(position(x,y));
 		// take over the food_eaten score, bec otherwise it will get culled instantly 
-		food_eaten = C->food_eaten;
+		// food_eaten = C->food_eaten;
 		// mutate 
 		NN.mutateW();
 		NN.mutateB();
@@ -104,27 +105,38 @@ class Creature : public WorldObject
 
 	void update() override
 	{
-		// calc output of NN
-		NN.propagate(input_container);
+		if (is_alive){
 
-		updateV_e();
+			// calc output of NN
+			NN.propagate(input_container);
 
-		// transform
-		pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
-		pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
-		rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
+			updateV_e();
+
+			// transform
+			pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
+			pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
+			rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
 
 
-		// base class update call
-		WorldObject::update();
+			// base class update call
+			WorldObject::update();
 
-		// set text1
-		m_text.setString("ID: "+ std::to_string(ID));
-		m_text.setPosition(pos.x+20, pos.y+10);
+			// set text1
+			m_text.setString("Out: "+ roundToString(NN.getOutput()[1],4));
+			m_text.setPosition(pos.x+20, pos.y+10);
+			m_text.setFillColor(sf::Color(0,0,0,health*255));
+			// set text2 
 		// set text2 
-		m_text2.setString("Out: "+roundToString(NN.getOutput()[1],4));
-		m_text2.setPosition(pos.x+20, pos.y);
+			// set text2 
+		// set text2 
+			// set text2 
+		// set text2 
+			// set text2 
+			m_text2.setString("Score: "+roundToString(score,4));
+			m_text2.setPosition(pos.x+20, pos.y);
+			m_text2.setFillColor(sf::Color(0,0,0,health*255));
 
+		}
 
 	}
 
@@ -132,8 +144,10 @@ class Creature : public WorldObject
 	void eat()
 	{
 		// gets called externally when collision with food is detected
-		health = S_HEALTH;
-		food_eaten += 1;
+		if (is_alive){
+			health += 0.4;
+			food_eaten += 1;
+		}
 	}
 
 	~Creature()
