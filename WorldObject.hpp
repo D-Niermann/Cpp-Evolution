@@ -27,7 +27,7 @@ class WorldObject
 
 	virtual void calcHealth(){ 
 		float h;
-		h = this->health-m_DecayRate;
+		h = this->health - m_DecayRate;
 		health = h;
 	}
 

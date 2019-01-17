@@ -146,8 +146,9 @@ class SFML_Display
 				// draw debug lines
 					// m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
 				// debug text
-					// for (int t = 0; t<2; t++){
-					// 	m_window.draw(M.creatures[i].getText(t));
+					for (int t = 0; t<2; t++){
+						m_window.draw(M.creatures[i].getText(t));
+					}
 
 				// draw plot lines
 					m_window.draw(P.verticesXAxis, 2, sf::Lines);

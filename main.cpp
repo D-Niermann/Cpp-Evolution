@@ -23,6 +23,9 @@
 
 int main()
 {
+
+	srand(2);
+	
 	// create the display class for window and main loop
 	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);
 	

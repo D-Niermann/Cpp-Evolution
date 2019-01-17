@@ -14,4 +14,4 @@ TODO:
 
 	- dont switch values to 0 instantly if creature doesnt see the food
 
-	- **mutateB**
+	- introduce a hunter class which hunts the creatures, or just a creature class with different NN_inputs?

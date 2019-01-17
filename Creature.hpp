@@ -27,6 +27,12 @@ class Creature : public WorldObject
 		score = health * food_eaten;
 	}
 
+	void calcHealth() override{ 
+		// decr health if boost (NN output[1]) is higher than 1, but save health if boost is lower 1
+		float h;
+		h = this -> health - (m_DecayRate * clamp(NN.getOutput()[1],0.5,2));
+		health = h;
+	}
   public:
 	sf::Vertex vertices[2] ;
 
@@ -55,7 +61,7 @@ class Creature : public WorldObject
 		m_DecayRate = config::creatureDecayRate + random(-config::creatureDecayRate*0.1, config::creatureDecayRate*0.1);
 		// inits the rest (set position to the parent creature)
 		respawn(position(x,y));
-		// take over the food_eaten score
+		// take over the food_eaten score, bec otherwise it will get culled instantly 
 		food_eaten = C->food_eaten;
 		// mutate 
 		NN.mutateW();
@@ -97,11 +103,11 @@ class Creature : public WorldObject
 		v_e.y = std::sin(rot*3.1415/180);
 
 		// transform
-		pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed);
-		pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed);
+		pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
+		pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
 		rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
 
-		
+				
 
 
 		// base class update call
@@ -111,7 +117,7 @@ class Creature : public WorldObject
 		m_text.setString("ID: "+ std::to_string(ID));
 		m_text.setPosition(pos.x+20, pos.y+10);
 		// set text2 
-		m_text2.setString("Score: "+roundToString(score,3));
+		m_text2.setString("Lifetime: "+roundToString(lifetime%config::REPRO_TIME,4));
 		m_text2.setPosition(pos.x+20, pos.y);
 
 

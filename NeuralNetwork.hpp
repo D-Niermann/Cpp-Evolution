@@ -30,7 +30,7 @@ class NeuralNetwork
 				o
 		*/
 
-		static constexpr float w_init_multiplier = 0.1;
+		float w_init_multiplier = 0.1;
 
 	public:
 		NeuralNetwork(int n_input, int n_hidden, int n_output) : n_input(n_input), n_hidden(n_hidden), n_output(n_output)
@@ -119,7 +119,6 @@ class NeuralNetwork
 		{
 			int which_b = (int)random(0, n_layers);
 			unsigned int x;
-			print("Mutate Bias " + std::to_string(which_b));
 
 			if (which_b == 0)
 			{
@@ -134,8 +133,6 @@ class NeuralNetwork
 			else if (which_b == 2)
 			{
 				x = (int) random(0, n_output-1);
-				print("Mutate pos:");
-				print(n_output);
 				b_output(x) += random(-b_output(x)*P, b_output(x)*P);
 			}
 		
@@ -147,9 +144,9 @@ class NeuralNetwork
 		}
 
 		sf::Color calcColor(const float& f){
-			float r = 255 - weights2.row(0).mean()*100;
-			float g = 255 - weights2.row(1).mean()*100;
-			float b = 255 - weights2.row(2).mean()*100;
+			float r = 255 - std::abs(weights1.row(0).mean())*100;
+			float g = 255 - std::abs(weights1.row(1).mean())*100;
+			float b = 255 - std::abs(weights1.row(2).mean())*100;
 			float a = f*255;
 			return sf::Color(r,g,b,a);
 		}
