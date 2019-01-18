@@ -5,8 +5,8 @@ class NeuralNetwork
 {
 	private:
 		// mutate factor in percent of the mutated value
-		static constexpr float P = 1;
-
+		static constexpr float P = 0.2;
+		static const int n_mutations = 5;
 		const static int n_layers = 3;
 
 		int n_input, n_hidden, n_output;
@@ -100,18 +100,20 @@ class NeuralNetwork
 		void mutateW()
 		{
 			int x,y;
-			int which_w = (int)random(0,2); // by casting to int the max bound needs to be one int higher
-			if (which_w == 0)
-			{
-				x = (int)random(0,weights1.rows());
-				y = (int)random(0,weights1.cols());
-				weights1(x,y) += random(-weights1(x,y)*P,weights1(x,y)*P);
-			}
-			else if (which_w == 1)
-			{
-				x = (int)random(0,weights2.rows());
-				y = (int)random(0,weights2.cols());
-				weights2(x,y) += random(-weights2(x,y)*P,weights2(x,y)*P);
+			for (int i = 0; i<n_mutations; i++){
+				int which_w = (int)random(0,n_layers-1); // by casting to int the max bound needs to be one int higher
+				if (which_w == 0)
+				{
+					x = (int)random(0,weights1.rows());
+					y = (int)random(0,weights1.cols());
+					weights1(x,y) += random(-weights1(x,y)*P,weights1(x,y)*P);
+				}
+				else if (which_w == 1)
+				{
+					x = (int)random(0,weights2.rows());
+					y = (int)random(0,weights2.cols());
+					weights2(x,y) += random(-weights2(x,y)*P,weights2(x,y)*P);
+				}
 			}
 		}
 
@@ -144,9 +146,9 @@ class NeuralNetwork
 		}
 
 		sf::Color calcColor(const float& f){
-			float r = 255 - std::abs(weights1.row(0).mean())*100;
-			float g = 255 - std::abs(weights1.row(1).mean())*100;
-			float b = 255 - std::abs(weights1.row(2).mean())*100;
+			float r = 255 - std::abs(weights1.row(0).mean())*1000;
+			float g = 255 - std::abs(weights1.row(1).mean())*1000;
+			float b = 255 - std::abs(weights1.row(2).mean())*1000;
 			float a = clamp(f*255,20,255);
 
 			return sf::Color(r,g,b,a);

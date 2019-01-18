@@ -1,6 +1,6 @@
 #pragma once
 
-class Creature : public WorldObject
+class Creature : virtual public WorldObject
 {
   protected:
 
@@ -31,7 +31,7 @@ class Creature : public WorldObject
 	void calcHealth() override{ 
 		// decr health if boost (NN output[1]) is higher than 1, but save health if boost is lower 1
 		float h;
-		h = this -> health - (m_DecayRate * std::pow(clamp(NN.getOutput()[1],0.5,2),2));
+		h = this -> health - (m_DecayRate * std::pow(clamp(NN.getOutput()[1],0.5,2),1.3));
 		health = h;
 	}
 
@@ -73,6 +73,7 @@ class Creature : public WorldObject
 		respawn(position(x,y));
 		// take over the food_eaten score, bec otherwise it will get culled instantly 
 		// food_eaten = C->food_eaten;
+		rot = C->rot + 90;
 		// mutate 
 		NN.mutateW();
 		NN.mutateB();
@@ -90,8 +91,10 @@ class Creature : public WorldObject
 		// inits the rest (set position to the parent creature)
 		respawn(position(x,y));
 		// mutate 
-		NN.mutateW();
-		NN.mutateB();
+		for (int i = 0; i<3; i++){
+			NN.mutateW();
+			NN.mutateB();
+		}
 	}
 
 	void respawn(position p) override

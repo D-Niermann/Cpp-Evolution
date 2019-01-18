@@ -69,29 +69,36 @@ struct config
 
 	static constexpr float foodSpriteScale = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
+	static constexpr float hunterSpriteScale = 1.0;
 	static const int worldMargin = 20;
 
 	// world object specific
-	static constexpr float creatureDecayRate = 0.002;
+	static constexpr float creatureDecayRate = 0.001;
+	static constexpr float hunterDecayRate = 0.001;
 	static constexpr float creatureFoodReach = 30;
-	static const int REPRO_TIME = 12*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
+	static const int REPRO_TIME_CREATURES = 12*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
+	static const int REPRO_TIME_HUNTERS = 3*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
+	static const int REPRO_TIME_FOOD = 1*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
 
-	static const unsigned int S_CREATURES = 10;
+	static const unsigned int S_CREATURES = 7;
+	static const unsigned int MIN_CREATURES = 4;
 	static const unsigned int MAX_CREATURES = 10;
-	static const unsigned int S_FOOD = 6;
-	static const unsigned int MAX_FOOD = 10;
+	static const unsigned int S_FOOD = 4;
+	static const unsigned int MAX_FOOD = 20;
 	static const unsigned int S_HUNTERS = 1;
 
 	// loading and saving
 	static const bool INIT_LOAD = true;
 	static const std::string SAVE_PATH;
-	static const std::string LOAD_ID;
+	static const std::string LOAD_ID_CREATURES;
+	static const std::string LOAD_ID_HUNTERS;
 	static const bool DO_SAVE = true;
-	static const bool DO_PRINTLOG = false;
+	static const bool DO_PRINTLOG = true;
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="/Users/Niermann/Documents/C++/Cpp-SFML-Eigen/Saves/";
-const std::string config::LOAD_ID = "438999"; //862348 best, 236443 very best, 51613 best with boost
+const std::string config::LOAD_ID_CREATURES = "567985"; //862348 best, 236443 very best, 567985 best with boost
+const std::string config::LOAD_ID_HUNTERS = "567985"; //862348 best, 236443 very best, 567985 best with boost
 
 
 /* 
@@ -105,6 +112,12 @@ float random(float low, float high)
 	float r;
 	r = low + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX/(high-low)));
 	return r; 
+}
+int randomInt(float low, float high)
+{
+	float r;
+	r = low + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX/(high-low)));
+	return (int)r; 
 }
 
 

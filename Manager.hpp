@@ -12,7 +12,7 @@ class Manager
 		// food 
 		std::vector<Food> food;
 		// hunters
-		std::vector<Creature> hunters;
+		std::vector<Hunter> hunters;
 	
 	
 		// add class to given array
@@ -65,6 +65,10 @@ class Manager
 			for(int i = 0; i<food.size(); i++){
 				food[i].update();
 			}
+			// updates all hunters
+			for(int i = 0; i<hunters.size(); i++){
+				hunters[i].update();
+			}
 			
 			if (frame%5 == 0)
 				CollisionCheckAndCreatureInput();
@@ -78,6 +82,7 @@ class Manager
 			NN_Input creature_input;
 			position diff_vector;
 			float angle;
+			av_score = 0;
 			
 			// go through all creatures and food and if distance is below threshold destroy food and call creature[i].eat()
 			for(int i = 0; i<creatures.size(); i++){
@@ -145,11 +150,9 @@ class Manager
 					best_creature = &creatures[i];
 					best_score = creatures[i].getScore();
 				}
-
-			av_score = av_score/creatures.size();
-				
-				
+	
 			}
+			av_score = av_score/creatures.size();
 		}
 		
 		// depricated, culls all creatures in v that are below an score threshold so that the MAX_creatures count is reached again
@@ -185,18 +188,19 @@ class Manager
 		template <typename T>
 		void cleanDeads(std::vector<T>& container){
 			int min_worldObj;
+			std::string type_name = typeid(container[0]).name();
 
-			// if (container.type() == "Creature"){
-			// 	min_worldObj = config::S_CREATURES;	
-			// }
-			// else if (container.type() == "Hunter"){
-			// 	min_worldObj = config::S_HUNTERS;
-			// }
+			if (type_name.find("Creature")!=std::string::npos){
+				min_worldObj = config::MIN_CREATURES;	
+			}
+			else if (type_name.find("Hunter")!=std::string::npos){
+				min_worldObj = config::S_HUNTERS;
+			}
 
 			for (int i = 0; i<container.size(); i++){
 				if (!container[i].isAlive())
 				{
-					if (config::S_CREATURES < container.size()){
+					if (min_worldObj < container.size()){
 						container.erase(container.begin()+i);
 					}
 					else{
@@ -210,7 +214,7 @@ class Manager
 		{
 			for(int i = 0; i<creatures.size(); i++)
 			{
-				if (creatures[i].getLifetime()%config::REPRO_TIME==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)
+				if (creatures[i].getLifetime()%config::REPRO_TIME_CREATURES==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)
 				{
 					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
 				}
@@ -220,14 +224,28 @@ class Manager
 			cleanDeads(creatures);
 		}
 
+		void reproduceHunters(sf::Texture& texture, sf::Font& font)
+		{
+			for(int i = 0; i<hunters.size(); i++)
+			{
+				if (hunters[i].getLifetime()%config::REPRO_TIME_HUNTERS==0 && hunters[i].getLifetime()>0 && hunters[i].getHealth()>0.85)
+				{
+					reproduceWorldObject<Hunter>(1,hunters, texture, font, &hunters[i]);
+				}
+			}
+			// if (hunters.size() > config::MAX_CREATURES)
+			// 	cull(hunters);
+			cleanDeads(hunters);
+		}
+
 		void reproduceFood(sf::Texture& texture, sf::Font& font){
 			float x,y;
 			if (food.size()<config::S_FOOD){
 				addWorldObject<Food>(2, food, texture, font);
 			}
 			for(int i = 0; i<food.size(); i++){
-				if (food[i].getLifetime()%50==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD){
-					addWorldObject<Food>(1,food,texture, font);
+				if (food[i].getLifetime()%config::REPRO_TIME_FOOD==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD && randomInt(0,3)==0){
+					reproduceWorldObject<Food>(1,food,texture, font, &food[i]);
 				}
 			}
 		}
@@ -238,6 +256,7 @@ class Manager
 
 		const float& getAvHealth(){
 			return av_score;
+
 		}
 		
 		~Manager()
@@ -247,6 +266,8 @@ class Manager
 					(*best_creature).getNN().save(best_creature->getID(),config::SAVE_PATH)
 					)
 					print("Saved best Neural Network!");
+
+				// save best hunter
 		}
 
 };

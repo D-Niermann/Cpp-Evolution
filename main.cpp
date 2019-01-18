@@ -15,6 +15,7 @@
 #include "NeuralNetwork.hpp"
 #include "WorldObject.hpp"
 #include "Creature.hpp"
+#include "Hunter.hpp"
 #include "Food.hpp"
 #include "Manager.hpp"
 #include "Plotter.hpp"
@@ -42,10 +43,12 @@ int main()
 	if (!config::INIT_LOAD){
 		print("Random init of creatures!");
 		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
+		M.addWorldObject<Hunter>(config::S_HUNTERS, M.hunters, Display.textureHunter, Display.font, config::LOAD_ID_HUNTERS);
 	}
 	else{
 		print("Loading from file!");
-		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font, config::LOAD_ID);
+		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font, config::LOAD_ID_CREATURES);
+		M.addWorldObject<Hunter>(config::S_HUNTERS, M.hunters, Display.textureHunter, Display.font, config::LOAD_ID_HUNTERS);
 	}
 	// food
 	M.addWorldObject<Food>(config::S_FOOD, M.food, Display.textureFood, Display.font);
