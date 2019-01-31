@@ -15,6 +15,9 @@ class Manager
 		std::vector<Hunter> hunters;
 	
 	
+
+
+
 		// add class to given array
 		template < class T >
 		void addWorldObject(unsigned int count, std::vector<T>& saveVector, sf::Texture& texture, sf::Font& font)
@@ -71,84 +74,100 @@ class Manager
 			}
 			
 			if (frame%5 == 0)
-				CollisionCheckAndCreatureInput();
+				CollisionCheckAndInput(creatures, food);
+				CollisionCheckAndInput(hunters, creatures);
 
 		}
 
-		void CollisionCheckAndCreatureInput()
+		// calc the distance and collision between v1 to v2, give NN inputs to v1 where v2 is the food source 
+		template <typename T1, typename T2>
+		void CollisionCheckAndInput(std::vector<T1>& v1, std::vector<T2>& v2)
 		{
-			float square_dist_i;
+			float dist_i;
 			float best_score = 0;
+			
 			NN_Input creature_input;
 			position diff_vector;
+
 			float angle;
 			av_score = 0;
 			
 			// go through all creatures and food and if distance is below threshold destroy food and call creature[i].eat()
-			for(int i = 0; i<creatures.size(); i++){
+			for(int i = 0; i<v1.size(); i++)
+			{
+				
 				// creature loop	
 				float closest_distance = 10000;
 				int save_j = -1;
 
 				// update collection vars
-				av_score += creatures[i].getScore();
+				av_score += v1[i].getScore();
 				
-				for (int j = 0; j<food.size(); j++){
+				for (int j = 0; j<v2.size(); j++)
+				{
 					// food loop
+					
 					// calc distance to food j
-					square_dist_i = pow(creatures[i].getPos().x - food[j].getPos().x, 2) + pow(creatures[i].getPos().y - food[j].getPos().y, 2);
+					dist_i = sqrt(pow(v1[i].getPos().x - v2[j].getPos().x, 2) + pow(v1[i].getPos().y - v2[j].getPos().y, 2));
+					
 					// calc diff vector between creature and food and the angle of it
-					diff_vector.x = creatures[i].getPos().x - food[j].getPos().x;
-					diff_vector.y = creatures[i].getPos().y - food[j].getPos().y;
-					angle = angle_in_deg(diff_vector,-creatures[i].getV_e());
+					diff_vector.x = v1[i].getPos().x - v2[j].getPos().x;
+					diff_vector.y = v1[i].getPos().y - v2[j].getPos().y;
+					angle = angle_in_deg(diff_vector,-v1[i].getV_e());
+
 					// collision check to food j
-					if (std::sqrt(square_dist_i) < config::creatureFoodReach)
+					if (dist_i < config::creatureFoodReach)
 					{
-						creatures[i].eat();
-						food.erase(food.begin()+j);
+						v1[i].eat();
+						v2.erase(v2.begin()+j);
 					}
 
-					// check if closest food is food j
-					if (std::abs(angle)< 90 && std::sqrt(square_dist_i)<closest_distance){
-						closest_distance = std::sqrt(square_dist_i);
+
+					// check if seen food is food j
+					if (std::abs(angle)< 90 && dist_i<closest_distance){
+						closest_distance = dist_i;
 						save_j = j;
 					}
 
 
-				}
+				} // all food looped through and closest seeable food found
 
-				// give input to creature i from closest food source save_j
-				if (save_j!=-1){
+				// give input to creature i from closest see-able food source save_j
+				if (save_j!=-1)
+				{
 					// calc distance to food j
-					square_dist_i = pow(creatures[i].getPos().x - food[save_j].getPos().x, 2) + pow(creatures[i].getPos().y - food[save_j].getPos().y, 2);
+					// dist_i = pow(creatures[i].getPos().x - food[save_j].getPos().x, 2) + pow(creatures[i].getPos().y - food[save_j].getPos().y, 2);
 					// calc diff vector between creature and food and the angle of it
-					diff_vector.x = creatures[i].getPos().x - food[save_j].getPos().x;
-					diff_vector.y = creatures[i].getPos().y - food[save_j].getPos().y;
+					diff_vector.x = v1[i].getPos().x - v2[save_j].getPos().x;
+					diff_vector.y = v1[i].getPos().y - v2[save_j].getPos().y;
 					angle = vec_angle_in_deg(diff_vector.x, diff_vector.y);
 
 					// set creature vertex 
-					creatures[i].vertices[0] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0,0));
-					creatures[i].vertices[1] = sf::Vertex(sf::Vector2f(  food[save_j].getPos().x, food[save_j].getPos().y), sf::Color(255,0,0));
+					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
+					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v2[save_j].getPos().x, v2[save_j].getPos().y), sf::Color(255,0,0));
 
-					creature_input.angle = angle_in_deg(diff_vector,-creatures[i].getV_e());
-					creature_input.dist = std::sqrt(square_dist_i);
-					creatures[i].giveInput(creature_input);
+					// give input
+					creature_input.angle = angle_in_deg(diff_vector,-v1[i].getV_e());
+					creature_input.dist = dist_i;
+					v1[i].giveInput(creature_input);
+
 				}
 				else
 				{
 					// no plant visible
 					// set creature vertex 
-					creatures[i].vertices[0] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0,0));
-					creatures[i].vertices[1] = sf::Vertex(sf::Vector2f(  creatures[i].getPos().x,  creatures[i].getPos().y), sf::Color(255,0,0));
+					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
+					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0));
 
 					creature_input.angle = 0;
 					creature_input.dist = 100000;
-					creatures[i].giveInput(creature_input);
+					v1[i].giveInput(creature_input);
 				}
 
-				if (creatures[i].getScore()>best_score){
-					best_creature = &creatures[i];
-					best_score = creatures[i].getScore();
+				if (v1[i].getScore()>best_score)
+				{
+					best_creature = &v1[i];
+					best_score = v1[i].getScore();
 				}
 	
 			}
@@ -212,6 +231,9 @@ class Manager
 		
 		void reproduceCreatures(sf::Texture& texture, sf::Font& font)
 		{
+			if (creatures.size()<config::MIN_CREATURES){
+				addWorldObject<Creature>(2, creatures, texture, font);
+			}
 			for(int i = 0; i<creatures.size(); i++)
 			{
 				if (creatures[i].getLifetime()%config::REPRO_TIME_CREATURES==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)

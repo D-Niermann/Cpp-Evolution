@@ -136,6 +136,7 @@ class SFML_Display
 				// check reproduction and print log
 				if (frame % 60 == 0 and frame>0){
 					M.reproduceCreatures(textureCreature, font);
+					M.reproduceHunters(textureHunter, font);
 					M.reproduceFood(textureFood, font);
 					// print log
 					
@@ -166,30 +167,29 @@ class SFML_Display
 			for (int i = 0; i < M.creatures.size(); i++)
 			{
 				m_window.draw(M.creatures[i].getSprite());
-			
-				/*
-				DEBUG DRAW
-				*/
 				// draw debug lines
-					// m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
+				m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
 				// debug text
-					for (int t = 0; t<2; t++){
-						m_window.draw(M.creatures[i].getText(t));
-					}
+				for (int t = 0; t<2; t++){
+					m_window.draw(M.creatures[i].getText(t));
+				}
 
-				// draw plot lines
-					m_window.draw(P.verticesXAxis, 2, sf::Lines);
-					m_window.draw(P.verticesYAxis, 2, sf::Lines);
-				// }
 			}
-
 
 			for (int i = 0; i < M.hunters.size(); i++)
 			{
 				m_window.draw(M.hunters[i].getSprite());
+				m_window.draw(M.hunters[i].vertices, 2, sf::Lines);
+				for (int t = 0; t<2; t++){
+					m_window.draw(M.hunters[i].getText(t));
+				}
+
 			}
 
 			// Plotter
+			// draw plot lines
+			m_window.draw(P.verticesXAxis, 2, sf::Lines);
+			m_window.draw(P.verticesYAxis, 2, sf::Lines);
 			position pos;
 			for (int i = 0; i<P.getSize(); i++){
 				// draw a sprite on each position

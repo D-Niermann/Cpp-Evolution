@@ -1,4 +1,7 @@
-
+struct CollectionVars
+{
+	float av_score_creatures;
+};
 
 struct position
 {
@@ -69,7 +72,7 @@ struct config
 
 	static constexpr float foodSpriteScale = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
-	static constexpr float hunterSpriteScale = 1.0;
+	static constexpr float hunterSpriteScale = 0.7;
 	static const int worldMargin = 20;
 
 	// world object specific
@@ -85,7 +88,7 @@ struct config
 	static const unsigned int MAX_CREATURES = 10;
 	static const unsigned int S_FOOD = 4;
 	static const unsigned int MAX_FOOD = 20;
-	static const unsigned int S_HUNTERS = 1;
+	static const unsigned int S_HUNTERS = 2;
 
 	// loading and saving
 	static const bool INIT_LOAD = true;

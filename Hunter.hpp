@@ -4,7 +4,7 @@
 class Hunter : public Creature
 {
 	private:
-		static constexpr float max_move_speed = 2;
+		static constexpr float max_move_speed = 1.9;
 		static constexpr float max_rot_speed = 2;
 		static constexpr float eps = 0.0001;
 
@@ -12,7 +12,7 @@ class Hunter : public Creature
 	public:
 		// Constructor
 		Hunter(sf::Texture &texture, float x, float y, sf::Font& font) : 
-			WorldObject(texture,x, y, font),
+
 			Creature(texture, x, y, font)
 		{
 			
