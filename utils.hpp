@@ -93,7 +93,7 @@ struct config
 	static constexpr float MUTATION_FACTOR = 0.4;
 
 	// loading and saving
-	static const bool INIT_LOAD = true;
+	static const bool INIT_LOAD = false;
 	static const std::string SAVE_PATH;
 	static const std::string LOAD_ID_CREATURES;
 	static const std::string LOAD_ID_HUNTERS;
@@ -153,7 +153,7 @@ float vec_angle_in_deg(float x, float y)
 
 float angle_in_deg(position v1, position v2)
 {
-	return std::atan2f(v1.x*v2.y-v1.y*v2.x,v1.x*v2.x+v1.y*v2.y)*180/3.1415;
+	return std::atan2(v1.x*v2.y-v1.y*v2.x,v1.x*v2.x+v1.y*v2.y)*180/3.1415;
 }
 
 float clamp(float x, float min, float max)
@@ -167,21 +167,21 @@ float clamp(float x, float min, float max)
 	return x;
 }
 
-// stupid implementation per 
-void clamp(Eigen::VectorXf& M, float min, float max)
-{
-	for(int i= 0; i < M.rows(); i++){
-		for (int j = 0; j< M.cols(); j++){
-			if (M(i,j) > max){
-				M(i,j) = max;
-			}
-			else if (M(i,j) < min){
-				M(i,j) = min;
-			}
+// stupid implementation per ...
+// void clamp(Eigen::VectorXf& M, float min, float max)
+// {
+// 	for(int i= 0; i < M.rows(); i++){
+// 		for (int j = 0; j< M.cols(); j++){
+// 			if (M(i,j) > max){
+// 				M(i,j) = max;
+// 			}
+// 			else if (M(i,j) < min){
+// 				M(i,j) = min;
+// 			}
 			
-		}
-	}
-}
+// 		}
+// 	}
+// }
 /*
 // implementation through ...
 void clamp(Eigen::MatrixXf& M, float min, float max)
