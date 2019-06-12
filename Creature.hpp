@@ -1,6 +1,6 @@
 #pragma once
 
-class Creature : virtual public WorldObject
+class Creature : public WorldObject
 {
   protected:
 
@@ -13,6 +13,7 @@ class Creature : virtual public WorldObject
 	static constexpr float eps = 0.0001;
 
 	int food_eaten = 0;
+	
 
 
 	// input container contains all possible input vars from creature

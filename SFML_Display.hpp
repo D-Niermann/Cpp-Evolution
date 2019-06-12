@@ -136,7 +136,7 @@ class SFML_Display
 				// check reproduction and print log
 				if (frame % 60 == 0 and frame>0){
 					M.reproduceCreatures(textureCreature, font);
-					M.reproduceHunters(textureHunter, font);
+					// M.reproduceHunters(textureHunter, font);
 					M.reproduceFood(textureFood, font);
 					// print log
 					
@@ -168,7 +168,7 @@ class SFML_Display
 			{
 				m_window.draw(M.creatures[i].getSprite());
 				// draw debug lines
-				m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
+				// m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
 				// debug text
 				for (int t = 0; t<2; t++){
 					m_window.draw(M.creatures[i].getText(t));

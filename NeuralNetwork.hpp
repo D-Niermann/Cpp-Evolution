@@ -5,7 +5,7 @@ class NeuralNetwork
 {
 	private:
 		// mutate factor in percent of the mutated value
-		static constexpr float P = 0.2;
+		static constexpr float P = config::MUTATION_FACTOR;
 		static const int n_mutations = 5;
 		const static int n_layers = 3;
 

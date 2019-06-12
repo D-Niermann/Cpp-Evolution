@@ -203,7 +203,7 @@ class Manager
 			}
 		}
 
-		// cleans all corpses (deletes them), if creature count is less than Min creatures , respawn them instean
+		// cleans all corpses (deletes them), if creature count is less than Min creatures , respawn them instead
 		template <typename T>
 		void cleanDeads(std::vector<T>& container){
 			int min_worldObj;
@@ -277,8 +277,8 @@ class Manager
 		}
 
 		const float& getAvHealth(){
+			::print(av_score);
 			return av_score;
-
 		}
 		
 		~Manager()

@@ -12,7 +12,7 @@ class Hunter : public Creature
 	public:
 		// Constructor
 		Hunter(sf::Texture &texture, float x, float y, sf::Font& font) : 
-
+			// WorldObject(texture,x, y, font),
 			Creature(texture, x, y, font)
 		{
 			
@@ -26,7 +26,7 @@ class Hunter : public Creature
 
 		// consttructor for inheritance of parent parameters
 		Hunter(sf::Texture &texture, float x, float y, sf::Font& font, Hunter* C) : 
-			WorldObject(texture,x, y, font),
+			// WorldObject(texture,x, y, font),
 			Creature(texture, x, y, font , C)
 		{
 			// set srpite scale
@@ -45,7 +45,7 @@ class Hunter : public Creature
 		
 		// consttructor for loading of parameters from file
 		Hunter(sf::Texture &texture, float x, float y, sf::Font& font, const std::string load_id) : 
-			WorldObject(texture,x, y, font),
+			// WorldObject(texture,x, y, font),
 			Creature(texture, x, y, font, load_id)
 		{
 			// set srpite scale
