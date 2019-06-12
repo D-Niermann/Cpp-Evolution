@@ -70,7 +70,7 @@ class WorldObject
 	}
 
 	void boundaryCheck(){
-		// limit position
+		// limit position to guarantee the object is in world space
 		if (pos.x > config::WINDOW_X-config::worldMargin)
 		{
 			pos.x = config::WINDOW_X-config::worldMargin;

@@ -25,22 +25,22 @@ class SFML_Display
 	void loadTextures()
 	{
 		// load creature texture
-		if (!textureCreature.loadFromFile("Images/creatureSprite.png"))
+		if (!textureCreature.loadFromFile("./Images/creatureSprite.png"))
 		{
 			throw("Error");
 		}
 		//load plant textures
-		if (!textureFood.loadFromFile("Images/tree_01.png"))
+		if (!textureFood.loadFromFile("./Images/tree_01.png"))
 		{
 			throw("Error");
 		}
 		//load plotpoint textures
-		if (!texturePlotPoint.loadFromFile("Images/creatureSprite.png"))
+		if (!texturePlotPoint.loadFromFile("./Images/creatureSprite.png"))
 		{
 			throw("Error");
 		}
 		// load hunter texture
-		if (!textureHunter.loadFromFile("Images/hunterSprite.png"))
+		if (!textureHunter.loadFromFile("./Images/hunterSprite.png"))
 		{
 			throw("Error");
 		}
