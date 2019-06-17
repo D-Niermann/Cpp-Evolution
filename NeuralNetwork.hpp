@@ -6,7 +6,7 @@ class NeuralNetwork
 	private:
 		// mutate factor in percent of the mutated value
 		static constexpr float P = config::MUTATION_FACTOR;
-		static const int n_mutations = 5;
+		static const int n_mutations = 10;
 		const static int n_layers = 3;
 
 		int n_input, n_hidden, n_output;
@@ -23,11 +23,11 @@ class NeuralNetwork
 		Vector3f b_output;
 		VectorXf b_hidden;
 		/* Network:
-				o
-		dis	o	o	o = forw speed and dir [-1,1]
-				o	o = unused
-		ang	o	o	o = rot. speed and dir [-1,1]
-				o
+						o
+		dis			o	o	o = forw speed and dir [-1,1]
+		ang			o	o	o = boost
+		distToSelf	o	o	o = rot. speed and dir [-1,1]
+						o
 		*/
 
 		float w_init_multiplier = 0.2;
@@ -42,15 +42,10 @@ class NeuralNetwork
 			b_hidden = b_hidden.Random(n_hidden)*w_init_multiplier;
 			b_output = b_output.Random(n_output)*w_init_multiplier;
 			b_input = b_input.Random(n_input)*w_init_multiplier;
-			b_output(0) = 0.1;
+			b_output(0) = 0.2;
 			// weights1.block(1,0,n_hidden_units-1,1) = MatrixXf().Zero(n_hidden_units-1,1);
 			// zero init of visible layers
 			l_input = l_input.Zero(n_input);
-			l_hidden = l_hidden.Zero(n_hidden);
-			l_output = l_output.Zero(n_output);
-		}
-
-		// init Neural network with existing other NN
 		NeuralNetwork(int n_input, int n_hidden, int n_output, const NeuralNetwork& other) : n_input(n_input), n_hidden(n_hidden), n_output(n_output)
 		{
 			
@@ -93,7 +88,7 @@ class NeuralNetwork
 
 			// hidden units
 			l_hidden =  (weights1 * l_input) + b_hidden;
-			// clamp(l_hidden, -1, 1);
+			// l_hidden = clamp(l_hidden, -10, 10);
 			l_output =  (weights2 * l_hidden)+ b_output;
 		}
 
@@ -101,7 +96,7 @@ class NeuralNetwork
 		{
 			int x,y;
 			for (int i = 0; i<n_mutations; i++){
-				int which_w = (int)random(0,n_layers-1); // by casting to int the max bound needs to be one int higher
+				int which_w = randomInt(0,n_layers-1); // by casting to int the max bound needs to be one int higher
 				if (which_w == 0)
 				{
 					x = (int)random(0,weights1.rows());
@@ -144,7 +139,9 @@ class NeuralNetwork
 		const Vector3f& getOutput() const{
 			return l_output;
 		}
-
+		const VectorXf& getHidden() const{
+			return l_hidden;
+		}
 		sf::Color calcColor(const float& f){
 			float r = 255 - std::abs(weights1.row(0).mean())*1000;
 			float g = 255 - std::abs(weights1.row(1).mean())*1000;

@@ -27,7 +27,7 @@ class Manager
 			// add all class instances of type T to the save vector
 			for (int i = 0; i < count; i++)
 			{
-				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m), font) );
+				saveVector.emplace_back( T(texture, randomPositionInWindow().x, randomPositionInWindow().y, font) );
 			}
 		}
 		// overload with load id that tells what file to load the NN from
@@ -39,7 +39,7 @@ class Manager
 			// add all class instances of type T to the save vector
 			for (int i = 0; i < count; i++)
 			{
-				saveVector.emplace_back( T(texture, random(0+m,config::WINDOW_X-m), random(0+m,config::WINDOW_Y-m), font, load_id) );
+				saveVector.emplace_back( T(texture, randomPositionInWindow().x, randomPositionInWindow().y, font, load_id) );
 			}
 		}
 
@@ -90,7 +90,7 @@ class Manager
 			position diff_vector;
 
 			float angle;
-			av_score = 0;
+			// av_score = 0;
 			
 			// go through all creatures and food and if distance is below threshold destroy food and call creature[i].eat()
 			for(int i = 0; i<v1.size(); i++)
@@ -147,8 +147,9 @@ class Manager
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v2[save_j].getPos().x, v2[save_j].getPos().y), sf::Color(255,0,0));
 
 					// give input
-					creature_input.angle = angle_in_deg(diff_vector,-v1[i].getV_e());
-					creature_input.dist = dist_i;
+					creature_input.setInput("angle", angle_in_deg(diff_vector,-v1[i].getV_e()));
+					creature_input.setInput("dist", dist_i);
+					creature_input.setInput("distToSelf", 0.01*distances_creatures[i]);
 					v1[i].giveInput(creature_input);
 
 				}
@@ -159,8 +160,9 @@ class Manager
 					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0));
 
-					creature_input.angle = 0;
-					creature_input.dist = 100000;
+					creature_input.setInput("angle", 0);
+					creature_input.setInput("dist", 100000);
+					creature_input.setInput("distToSelf", 0.01*distances_creatures[i]);
 					v1[i].giveInput(creature_input);
 				}
 
@@ -171,7 +173,9 @@ class Manager
 				}
 	
 			}
-			av_score = av_score/creatures.size();
+			if (creatures.size() > 0){
+				av_score = av_score/creatures.size();
+			}
 		}
 		
 		// depricated, culls all creatures in v that are below an score threshold so that the MAX_creatures count is reached again
@@ -265,11 +269,13 @@ class Manager
 			if (food.size()<config::S_FOOD){
 				addWorldObject<Food>(2, food, texture, font);
 			}
+			
 			for(int i = 0; i<food.size(); i++){
 				if (food[i].getLifetime()%config::REPRO_TIME_FOOD==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD && randomInt(0,3)==0){
 					reproduceWorldObject<Food>(1,food,texture, font, &food[i]);
 				}
 			}
+		
 		}
 
 		const Creature* getBestCreature(){
@@ -277,7 +283,6 @@ class Manager
 		}
 
 		const float& getAvHealth(){
-			::print(av_score);
 			return av_score;
 		}
 		

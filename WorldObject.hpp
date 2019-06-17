@@ -6,11 +6,10 @@ class WorldObject
   	// start values 
   	static constexpr float S_HEALTH = 1;
 	static const int S_LIFETIME = 0;
-	static constexpr float S_ROTATION = 0;
 
 	//constants
 	float m_DecayRate = 0;
-	int ID = (int)random(0,981239);
+	int ID = randomInt(0,RAND_MAX);
 	std::string type_str;
 	
 	// runtime values
@@ -44,10 +43,10 @@ class WorldObject
 	{
 		respawn(position(x,y));
 		is_alive = 1;
-
+		score = 0;
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 		texture.setSmooth(true);
-
+		rot = randomInt(0,360);
 		init_text(m_text, font);
 		init_text(m_text2, font);
 	}
@@ -116,7 +115,7 @@ class WorldObject
 
 	virtual void respawn(position p)
 	{
-		rot = WorldObject::S_ROTATION;
+		rot = randomInt(0,360);
 		lifetime = WorldObject::S_LIFETIME;
 		health = WorldObject::S_HEALTH;
 		pos = p;

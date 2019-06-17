@@ -5,7 +5,8 @@ class Plotter
 	protected:
 		position origin;
 		const float xScale = 1;
-		const float yScale = 10;
+		// bigger yscale means that smaller values will get displayed better
+		const float yScale = 100;
 		const float yoffset = 2;
 		const float xEnd = config::WINDOW_X-20;
 		const float x_spacing = 2;

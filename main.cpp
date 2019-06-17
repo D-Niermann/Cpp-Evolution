@@ -27,7 +27,7 @@ int main()
 {
 	// sf::ContextSettings(0,0,4);
 
-	srand(2);
+	// srand(2);
 
 	// create the display class for window and main loop
 	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);

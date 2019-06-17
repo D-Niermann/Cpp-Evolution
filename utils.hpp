@@ -101,9 +101,9 @@ struct config
 	static const bool DO_PRINTLOG = true;
 };
 // initialisations for config
-const std::string config::SAVE_PATH ="/Users/Niermann/Documents/C++/Cpp-SFML-Eigen/Saves/";
-const std::string config::LOAD_ID_CREATURES = "567985"; //862348 best, 236443 very best, 567985 best with boost
-const std::string config::LOAD_ID_HUNTERS = "567985"; //862348 best, 236443 very best, 567985 best with boost
+const std::string config::SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
+const std::string config::LOAD_ID_CREATURES = "10415"; 
+const std::string config::LOAD_ID_HUNTERS = "10415"; 
 
 
 /* 
@@ -114,23 +114,30 @@ FUNCTIONS
 
 float random(float low, float high)
 {
+	if (high==low){
+		print("WARNING: RandomFunction high == low!");
+		return low;
+	}
+	if (high > RAND_MAX || low > RAND_MAX){
+		print("WARNING: RandomFunction boundarys to high !");
+		std::cout << high << "," << low<< std::endl;
+		return low;
+	}
 	float r;
 	r = low + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX/(high-low)));
 	return r; 
 }
 int randomInt(float low, float high)
 {
-	float r;
-	r = low + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX/(high-low)));
-	return (int)r; 
+	return (int)random(low, high); 
 }
 
 
 position randomPositionInWindow()
 {
 	position p;
-	float x = 0 + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX/(config::WINDOW_X-0)));
-	float y = 0 + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX/(config::WINDOW_Y-0)));
+	float x = random(0+config::worldMargin, config::WINDOW_X-config::worldMargin);
+	float y = random(0+config::worldMargin, config::WINDOW_Y-config::worldMargin);
 	p.x = x;
 	p.y = y;
 	return p; 
@@ -165,6 +172,13 @@ float clamp(float x, float min, float max)
 		x = min;
 	}
 	return x;
+}
+
+Eigen::VectorXf clamp(Eigen::VectorXf v, float min, float max){
+	for(int i = 0; i<v.size(); i++){
+		v[i] = clamp(v[i], min, max);
+	}
+	return v;
 }
 
 // stupid implementation per ...

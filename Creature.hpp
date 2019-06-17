@@ -5,7 +5,6 @@ class Creature : public WorldObject
   protected:
 
 	static const int n_hidden_units = 3;
-	static const int n_input_units = 2;
 	static const int n_output_units = 3;
 
 	static constexpr float max_move_speed = 2;
@@ -50,9 +49,9 @@ class Creature : public WorldObject
 	// Constructor
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font) : 
 		WorldObject(texture, x, y, font), 
-		NN(n_input_units, n_hidden_units, n_output_units)
+		NN(input_container.size(), n_hidden_units, n_output_units)
 	{
-		
+
 		// set srpite scale
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
 		// set decay rate slightly random
@@ -64,7 +63,7 @@ class Creature : public WorldObject
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font, Creature* C) : 
 		WorldObject(texture, x, y, font), 
 		// init the neural network with existing one
-		NN(n_input_units, n_hidden_units, n_output_units, C->getNN())
+		NN(input_container.size(), n_hidden_units, n_output_units, C->getNN())
 	{
 		// set srpite scale
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
@@ -83,7 +82,7 @@ class Creature : public WorldObject
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font, const std::string load_id) : 
 		WorldObject(texture, x, y, font), 
 		// init the neural network with existing one
-		NN(n_input_units, n_hidden_units, n_output_units, load_id)
+		NN(input_container.size(), n_hidden_units, n_output_units, load_id)
 	{
 		// set srpite scale
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
@@ -126,21 +125,13 @@ class Creature : public WorldObject
 			WorldObject::update();
 
 			// set text1
-			m_text.setString("Out: "+ roundToString(NN.getOutput()[1],4));
+			m_text.setString("Out: "+ roundToString(NN.getHidden()[0],4) + ", " + roundToString(NN.getHidden()[1],4) + ", " +roundToString(NN.getHidden()[2],4));
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));
 			// set text2 
 		// set text2 
 			// set text2 
 		// set text2 
-			// set text2 
-		// set text2 
-			// set text2 
-			m_text2.setString("Score: "+roundToString(score,4));
-			m_text2.setPosition(pos.x+20, pos.y);
-			m_text2.setFillColor(sf::Color(0,0,0,health*255));
-
-		}
 
 	}
 
