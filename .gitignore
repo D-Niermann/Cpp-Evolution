@@ -3,3 +3,5 @@ build/Saves/
 CMakeBuild/
 /Saves
 .vscode
+/.vscode
+/build/Saves
