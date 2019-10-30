@@ -5,3 +5,4 @@ CMakeBuild/
 .vscode
 /.vscode
 /build/Saves
+build/
