@@ -30,7 +30,7 @@ class Creature : public WorldObject
 	void calcHealth() override{ 
 		// decr health if boost (NN output[1]) is higher than 1, but save health if boost is lower 1
 		float h;
-		h = this -> health - (m_DecayRate * std::pow(clamp(NN.getOutput()[1],0.5,2),1.3));
+		h = this -> health  - m_DecayRate*clamp(NN.getOutput()[1],0.5,2);
 		health = h;
 	}
 
@@ -115,8 +115,8 @@ class Creature : public WorldObject
 			updateV_e();
 
 			// transform
-			pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
-			pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);
+			pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);  // move based on NN output [0] and boost NN output [1]
+			pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2); // move based on NN output [0] and boost NN output [1]
 			rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
 
 

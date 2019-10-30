@@ -54,6 +54,7 @@ class Manager
 			for (int i = 0; i < count; i++)
 			{
 				saveVector.emplace_back( T(texture, parent->getPos().x, parent->getPos().y, font, parent) );
+				
 			}
 		}
 
@@ -175,77 +176,40 @@ class Manager
 				av_score = av_score/creatures.size();
 			}
 		}
-		
-		// depricated, culls all creatures in v that are below an score threshold so that the MAX_creatures count is reached again
-		template <typename T>
-		void cull(std::vector<T>& v)
-		{
-			// get all scores
-			std::vector<float> scores;
-			float threshold;
-			unsigned int cull_count;
 
-			for (const T& item : v){
-				scores.push_back(item.getScore());
-			
-			}
-			// sort the vector
-			std::sort(scores.begin(),scores.end());
-		
-			// calc the threshold value
-			cull_count = v.size() - config::MAX_CREATURES;
-			threshold = scores[cull_count];	
-			print(threshold,"Culling below");
-
-			// if score below threshold erase the creatue
-			for (int i = 0; i < v.size(); i++){
-				if (v[i].getScore() <= threshold){
-					v.erase(v.begin()+i);
-				}
-			}
-		}
-
-		// cleans all corpses (deletes them), if creature count is less than Min creatures , respawn them instead
-		template <typename T>
-		void cleanDeads(std::vector<T>& container){
-			int min_worldObj;
-			std::string type_name = typeid(container[0]).name();
-
-			if (type_name.find("Creature")!=std::string::npos){
-				min_worldObj = config::MIN_CREATURES;	
-			}
-			else if (type_name.find("Hunter")!=std::string::npos){
-				min_worldObj = config::S_HUNTERS;
-			}
-
-			for (int i = 0; i<container.size(); i++){
-				if (!container[i].isAlive())
-				{
-					if (min_worldObj < container.size()){
-						container.erase(container.begin()+i);
-					}
-					else{
-						container[i].respawn(randomPositionInWindow());
-					}
-				}
-			}
-		}
 		
 		void reproduceCreatures(sf::Texture& texture, sf::Font& font)
 		{
+
+			// if less then MIN_CREATURES creatures are living, spawn in new random ones
 			if (creatures.size()<config::MIN_CREATURES){
-				addWorldObject<Creature>(2, creatures, texture, font);
+				addWorldObject<Creature>(1, creatures, texture, font);
 			}
-			for(int i = 0; i<creatures.size(); i++)
-			{
-				if (creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)
+
+
+			// if less then MAX_Creatures are living, allow reproduction (check every creature and reproduce them if allowed)
+			if (creatures.size()<config::MAX_CREATURES){
+				
+				for(int i = 0; i<creatures.size(); i++)
 				{
-					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
+				
+					if (creatures[i].isAlive() && creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth() > 0.85)
+					{
+						reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
+					}
 				}
 			}
-			// if (creatures.size() > config::MAX_CREATURES)
-			// 	cull(creatures);
-			cleanDeads(creatures);
+
+		
+			// delete corpses
+			for (int i = 0; i<creatures.size(); i++){
+				if (!creatures[i].isAlive())
+				{
+					
+					creatures.erase(creatures.begin()+i);
+					
+				}
+			}		
 		}
 
 		void reproduceHunters(sf::Texture& texture, sf::Font& font)
@@ -259,7 +223,7 @@ class Manager
 			}
 			// if (hunters.size() > config::MAX_CREATURES)
 			// 	cull(hunters);
-			cleanDeads(hunters);
+			// cleanDeads(hunters);
 		}
 
 		void reproduceFood(sf::Texture& texture, sf::Font& font){

@@ -85,7 +85,7 @@ class SFML_Display
                 // window settings
                 m_window.setFramerateLimit(config::FRAMERATE);
                 m_window.setVerticalSyncEnabled(config::VSYNC);
-                frame = 1;
+                frame = 0;
                 GamePaused = false;
 
                 // init text
@@ -136,6 +136,10 @@ class SFML_Display
                                         if (event.key.code == sf::Keyboard::Down){
                                                 framerate *= 0.9;
                                         }
+
+										if (framerate < config::FRAMERATE){
+											framerate = config::FRAMERATE;
+										}
                                 }
 
                         }

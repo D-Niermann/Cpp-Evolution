@@ -19,13 +19,13 @@ struct config
 	static constexpr float creatureDecayRate = 0.001;
 	static constexpr float hunterDecayRate   = 0.001;
 	static constexpr float creatureFoodReach = 30;
-	static const int REPRO_TIME_CREATURES    = 12;  // in seconds
+	static const int REPRO_TIME_CREATURES    = 10;  // in seconds
 	static const int REPRO_TIME_HUNTERS      = 3;   // in seconds
 	static const int REPRO_TIME_FOOD         = 1;   // in seconds
 
 	static const unsigned int S_CREATURES   = 10;
-	static const unsigned int MIN_CREATURES = 10;
-	static const unsigned int MAX_CREATURES = 20;
+	static const unsigned int MIN_CREATURES = 0;
+	static const unsigned int MAX_CREATURES = 15;
 	static const unsigned int S_FOOD        = 4;
 	static const unsigned int MAX_FOOD      = 20;
 	static const unsigned int S_HUNTERS     = 0;

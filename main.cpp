@@ -27,7 +27,7 @@ int main()
 {
 	// sf::ContextSettings(0,0,4);
 
-	// srand(2);
+	// srand(223132);
 
 	// create the display class for window and main loop
 	SFML_Display Display(config::WINDOW_X, config::WINDOW_Y);
@@ -38,18 +38,23 @@ int main()
 	// create plotters
 	Plotter P(config::WINDOW_X - 300, config::WINDOW_Y - 40);
 
+	
+	
 	// add WorldObjects
-	// creatures, either init them randomly or load them from file
-	if (!config::INIT_LOAD){
-		print("Random init of creatures!");
-		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
-	}
-	else{ 
-		print("Loading from file! " + config::LOAD_ID_CREATURES);
-		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font, config::LOAD_ID_CREATURES);
-	}
-	// food
-	M.addWorldObject<Food>(config::S_FOOD, M.food, Display.textureFood, Display.font);
+	
+		// creatures, either init them randomly or load them from file
+		if (!config::INIT_LOAD){
+			print("Random init of creatures!");
+			M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
+		}
+		else{ 
+			print("Loading from file! " + config::LOAD_ID_CREATURES);
+			M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font, config::LOAD_ID_CREATURES);
+		}
+
+
+		// food
+		M.addWorldObject<Food>(config::S_FOOD-1, M.food, Display.textureFood, Display.font);
 
 
 

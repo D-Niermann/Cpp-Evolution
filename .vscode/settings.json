@@ -7,6 +7,7 @@
 		"__config": "cpp",
 		"cmath": "cpp",
 		"complex": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"*.tcc": "cpp"
 	}
 }

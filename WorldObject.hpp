@@ -8,7 +8,7 @@ class WorldObject
 	static const int S_LIFETIME = 0;
 
 	//constants
-	float m_DecayRate = 0;
+	float m_DecayRate = 0.001;
 	int ID = randomInt(0,RAND_MAX);
 	std::string type_str;
 	
@@ -44,6 +44,7 @@ class WorldObject
 		respawn(position(x,y));
 		is_alive = 1;
 		score = 0;
+		lifetime = S_LIFETIME;
 		m_sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
 		texture.setSmooth(true);
 		rot = randomInt(0,360);
