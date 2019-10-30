@@ -1,1 +1,3 @@
-/Saves
+.vscode/
+build/Saves/
+CMakeBuild/
