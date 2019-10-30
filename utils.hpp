@@ -39,16 +39,13 @@ struct NN_Input
 	float angle;
 
 	// number of input vars
-	static const int mysize = 2;
+	static const int size = 2;
 
 	NN_Input(){
 		dist = 0;
 		angle = 0;
 	}
 
-	const int& size(){
-		return this->mysize;
-	}
 
 	void display(){
 		std::cout << "Distance: " << dist << "," << "Angle: " << angle << std::endl;
@@ -61,49 +58,6 @@ void print(T t, std::string message = ""){
 	std::cout << message << " " << t << std::endl;
 }
 
-struct config
-{
-	// window specific
-	static const unsigned int FRAMERATE = 60;
-	static const bool VSYNC = true;
-	static const unsigned int WINDOW_X = 1200;
-	static const unsigned int WINDOW_Y = 800;
-	static const unsigned int TEXTSIZE = 12;
-
-	static constexpr float foodSpriteScale = 0.3;
-	static constexpr float creatureSpriteScale = 1.0;
-	static constexpr float hunterSpriteScale = 0.7;
-	static const int worldMargin = 20;
-
-	// world object specific
-	static constexpr float creatureDecayRate = 0.001;
-	static constexpr float hunterDecayRate = 0.001;
-	static constexpr float creatureFoodReach = 30;
-	static const int REPRO_TIME_CREATURES = 12*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
-	static const int REPRO_TIME_HUNTERS = 3*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
-	static const int REPRO_TIME_FOOD = 1*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
-
-	static const unsigned int S_CREATURES = 7;
-	static const unsigned int MIN_CREATURES = 4;
-	static const unsigned int MAX_CREATURES = 10;
-	static const unsigned int S_FOOD = 4;
-	static const unsigned int MAX_FOOD = 20;
-	static const unsigned int S_HUNTERS = 2;
-
-	static constexpr float MUTATION_FACTOR = 0.4;
-
-	// loading and saving
-	static const bool INIT_LOAD = false;
-	static const std::string SAVE_PATH;
-	static const std::string LOAD_ID_CREATURES;
-	static const std::string LOAD_ID_HUNTERS;
-	static const bool DO_SAVE = true;
-	static const bool DO_PRINTLOG = true;
-};
-// initialisations for config
-const std::string config::SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
-const std::string config::LOAD_ID_CREATURES = "10415"; 
-const std::string config::LOAD_ID_HUNTERS = "10415"; 
 
 
 /* 

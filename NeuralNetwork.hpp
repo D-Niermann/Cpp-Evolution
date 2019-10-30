@@ -1,6 +1,7 @@
 
 using namespace Eigen;
 
+
 class NeuralNetwork
 {
 	private:
@@ -12,16 +13,16 @@ class NeuralNetwork
 		int n_input, n_hidden, n_output;
 
 		// layers
-		Vector2f l_input;
-		Vector3f l_output;
-		VectorXf l_hidden;
+		Eigen::Vector2f l_input;
+		Eigen::Vector3f l_output;
+		Eigen::VectorXf l_hidden;
 		// weights
-		MatrixXf weights1;
-		MatrixXf weights2;
+		Eigen::MatrixXf weights1;
+		Eigen::MatrixXf weights2;
 		// bias
-		Vector2f b_input;
-		Vector3f b_output;
-		VectorXf b_hidden;
+		Eigen::Vector2f b_input;
+		Eigen::Vector3f b_output;
+		Eigen::VectorXf b_hidden;
 		/* Network:
 						o
 		dis			o	o	o = forw speed and dir [-1,1]
@@ -46,6 +47,8 @@ class NeuralNetwork
 			// weights1.block(1,0,n_hidden_units-1,1) = MatrixXf().Zero(n_hidden_units-1,1);
 			// zero init of visible layers
 			l_input = l_input.Zero(n_input);
+		}
+		
 		NeuralNetwork(int n_input, int n_hidden, int n_output, const NeuralNetwork& other) : n_input(n_input), n_hidden(n_hidden), n_output(n_output)
 		{
 			

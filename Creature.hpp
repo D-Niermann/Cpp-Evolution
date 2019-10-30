@@ -1,5 +1,4 @@
 #pragma once
-
 class Creature : public WorldObject
 {
   protected:
@@ -49,7 +48,7 @@ class Creature : public WorldObject
 	// Constructor
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font) : 
 		WorldObject(texture, x, y, font), 
-		NN(input_container.size(), n_hidden_units, n_output_units)
+		NN(NN_Input::size, n_hidden_units, n_output_units)
 	{
 
 		// set srpite scale
@@ -63,7 +62,7 @@ class Creature : public WorldObject
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font, Creature* C) : 
 		WorldObject(texture, x, y, font), 
 		// init the neural network with existing one
-		NN(input_container.size(), n_hidden_units, n_output_units, C->getNN())
+		NN(NN_Input::size, n_hidden_units, n_output_units, C->getNN())
 	{
 		// set srpite scale
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
@@ -82,7 +81,7 @@ class Creature : public WorldObject
 	Creature(sf::Texture &texture, float x, float y, sf::Font& font, const std::string load_id) : 
 		WorldObject(texture, x, y, font), 
 		// init the neural network with existing one
-		NN(input_container.size(), n_hidden_units, n_output_units, load_id)
+		NN(NN_Input::size, n_hidden_units, n_output_units, load_id)
 	{
 		// set srpite scale
 		m_sprite.setScale(config::creatureSpriteScale, config::creatureSpriteScale);
@@ -129,10 +128,11 @@ class Creature : public WorldObject
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));
 			// set text2 
-		// set text2 
 			// set text2 
-		// set text2 
+				// set text2 
+			// set text2 
 
+		}
 	}
 
 	

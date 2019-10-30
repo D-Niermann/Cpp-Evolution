@@ -147,9 +147,8 @@ class Manager
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v2[save_j].getPos().x, v2[save_j].getPos().y), sf::Color(255,0,0));
 
 					// give input
-					creature_input.setInput("angle", angle_in_deg(diff_vector,-v1[i].getV_e()));
-					creature_input.setInput("dist", dist_i);
-					creature_input.setInput("distToSelf", 0.01*distances_creatures[i]);
+					creature_input.angle = angle_in_deg(diff_vector,-v1[i].getV_e());
+					creature_input.dist = dist_i;
 					v1[i].giveInput(creature_input);
 
 				}
@@ -160,9 +159,8 @@ class Manager
 					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0));
 
-					creature_input.setInput("angle", 0);
-					creature_input.setInput("dist", 100000);
-					creature_input.setInput("distToSelf", 0.01*distances_creatures[i]);
+					creature_input.angle = 0;
+					creature_input.dist = 100000;
 					v1[i].giveInput(creature_input);
 				}
 

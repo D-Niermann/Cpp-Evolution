@@ -10,7 +10,7 @@
 #include <SFML/Window/ContextSettings.hpp>
 #include <typeinfo>
 
-
+#include "config.hpp"
 #include "utils.hpp"
 #include "NeuralNetwork.hpp"
 #include "WorldObject.hpp"
@@ -54,5 +54,5 @@ int main()
 
 
 	Display.StartMainLoop(M, P);
-	return 0;
+	
 }
