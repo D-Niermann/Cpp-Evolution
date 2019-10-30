@@ -1,9 +1,3 @@
 .vscode/
-build/Saves/
 CMakeBuild/
-/Saves
 .vscode
-/.vscode
-/build/Saves
-build/
-build/main.exe
