@@ -45,7 +45,7 @@ int main()
 		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font);
 	}
 	else{ 
-		print("Loading from file!");
+		print("Loading from file! " + config::LOAD_ID_CREATURES);
 		M.addWorldObject<Creature>(config::S_CREATURES, M.creatures, Display.textureCreature, Display.font, config::LOAD_ID_CREATURES);
 	}
 	// food
@@ -54,4 +54,5 @@ int main()
 
 
 	Display.StartMainLoop(M, P);
+	return 0;
 }

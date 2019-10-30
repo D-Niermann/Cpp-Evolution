@@ -2,11 +2,13 @@
 Evolution Simulator made with C++, Sfml and Eigen. Uses Reinforcement learning to train Creatures to optain food.
 
 ## Program
-Starting the Program opens a SFML Window which resembles a GameWorld in which freatures and food sources live. In the World, the creatures are governed by a neural network (NN), which is trained by an evolutionary process based on survival of the fittest and random mutations. 
+Starting the Program opens a SFML Window which resembles a GameWorld in which creatures and food sources live. In the World, the creatures are governed by a neural network (NN), which is trained by an evolutionary process based on survival of the fittest and random mutations. 
 
 The   Program can load existing Neural network structures from file, which where saved after a previous run of the Program or start with random initialisation of the NN.
 
 In the beginning, creatures will behave randomly, after appro. 10 minutes of runtime the creates learned to collect food effectivley (i.e. with minimum time and without wasting of their stamina)
+
+![Screenshot of the Running Program](ExampleImage.png)
 
 ## Structure
 The Project has two major classes; a Manager class and a Display class. The Display class `SMFL_Display` is responsible for the main loop at runtime, rendering all graphics and sounds and general SFML stuff. The manager class `Manager` manages all WorldObjects (Creatures, Food, ...) like spawning, killing, collision checks and so on. The methods get called by the display class in the main loop.
@@ -32,7 +34,7 @@ Display.StartMainLoop(M, P);
 ```
 
 ## Settings 
-The settings are in the `utisl.hpp` under the "static" struct `config`.
+The settings are in the `config.hpp`.
 
 ```c++
 struct config
@@ -53,9 +55,9 @@ struct config
 	static constexpr float creatureDecayRate = 0.001;
 	static constexpr float hunterDecayRate = 0.001;
 	static constexpr float creatureFoodReach = 30;
-	static const int REPRO_TIME_CREATURES = 12*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
-	static const int REPRO_TIME_HUNTERS = 3*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
-	static const int REPRO_TIME_FOOD = 1*60; // needs to be mutlitudes of 60! 1*60 is 1 sec
+	static const int REPRO_TIME_CREATURES = 12; // in seconds
+	static const int REPRO_TIME_HUNTERS = 3; // in seconds
+	static const int REPRO_TIME_FOOD = 1; // in seconds
 
 	static const unsigned int S_CREATURES = 7;
 	static const unsigned int MIN_CREATURES = 4;
@@ -76,4 +78,4 @@ struct config
 };
 ```
 
-The Program can also be paused by pressing P.
+The Program can also be paused by pressing P and Simulation speed can be changes using the arrow keys.

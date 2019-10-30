@@ -240,7 +240,7 @@ class Manager
 			}
 			for(int i = 0; i<creatures.size(); i++)
 			{
-				if (creatures[i].getLifetime()%config::REPRO_TIME_CREATURES==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)
+				if (creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth()>0.85)
 				{
 					reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
 				}
@@ -254,7 +254,7 @@ class Manager
 		{
 			for(int i = 0; i<hunters.size(); i++)
 			{
-				if (hunters[i].getLifetime()%config::REPRO_TIME_HUNTERS==0 && hunters[i].getLifetime()>0 && hunters[i].getHealth()>0.85)
+				if (hunters[i].getLifetime()%(config::REPRO_TIME_HUNTERS*60)==0 && hunters[i].getLifetime()>0 && hunters[i].getHealth()>0.85)
 				{
 					reproduceWorldObject<Hunter>(1,hunters, texture, font, &hunters[i]);
 				}
@@ -271,7 +271,7 @@ class Manager
 			}
 			
 			for(int i = 0; i<food.size(); i++){
-				if (food[i].getLifetime()%config::REPRO_TIME_FOOD==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD && randomInt(0,3)==0){
+				if (food[i].getLifetime()%(config::REPRO_TIME_FOOD*60)==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD && randomInt(0,3)==0){
 					reproduceWorldObject<Food>(1,food,texture, font, &food[i]);
 				}
 			}
