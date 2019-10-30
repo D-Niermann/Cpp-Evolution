@@ -5,3 +5,5 @@ CMakeBuild/
 .vscode
 /.vscode
 /build/Saves
+build/
+build/main.exe
