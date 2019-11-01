@@ -124,7 +124,7 @@ class Creature : public WorldObject
 			WorldObject::update();
 
 			// set text1
-			m_text.setString("Out: "+ roundToString(NN.getHidden()[0],4) + ", " + roundToString(NN.getHidden()[1],4) + ", " +roundToString(NN.getHidden()[2],4));
+			m_text.setString("Out: "+ roundToString(NN.getOutput()[0],4) + ", " + roundToString(NN.getOutput()[1],4) + ", " +roundToString(NN.getOutput()[2],4));
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));
 			// set text2 

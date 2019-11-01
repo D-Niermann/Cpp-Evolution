@@ -86,8 +86,8 @@ class NeuralNetwork
 		void propagate(NN_Input& input_container)
 		{
 			// convert input into eigen vector
-			l_input[0] = std::sqrt(input_container.dist);
-			l_input[1] = input_container.angle;
+			l_input[0] = std::sqrt(input_container.getDistance());
+			l_input[1] = input_container.getAngle();
 
 			// hidden units
 			l_hidden =  (weights1 * l_input) + b_hidden;

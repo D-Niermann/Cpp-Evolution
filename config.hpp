@@ -12,7 +12,7 @@ struct config
 
 	static constexpr float foodSpriteScale     = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
-	static constexpr float hunterSpriteScale   = 0.7;
+	static constexpr float hunterSpridteScale   = 0.7;
 	static const int worldMargin               = 20;
 
 	// world object specific
@@ -41,6 +41,6 @@ struct config
 	static const std::string LOAD_ID_HUNTERS;
 };
 // initialisations for config
-const std::string config::SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
+const std::string config::SAVE_PATH ="C:/Users/Dario/Documents/GitHub/Evolution-Cpp/build/Saves/";
 const std::string config::LOAD_ID_CREATURES = "23071"; 
 const std::string config::LOAD_ID_HUNTERS = "23071"; 

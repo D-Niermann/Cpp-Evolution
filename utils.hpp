@@ -31,25 +31,50 @@ struct position
 	}
 };
 
-struct NN_Input
+class NN_Input
 {
-	// distance to the nearest food source
-	float dist;
-	// angle to the neares food source
-	float angle;
+	private: 
+		// distance to the nearest food source
+		float dist;
+		// angle to the neares food source
+		float angle;
+		// number of input vars
 
-	// number of input vars
-	static const int size = 2;
+	public:
+		static const int size = 2; // number of free input params in this class.
 
-	NN_Input(){
-		dist = 0;
-		angle = 0;
-	}
+		NN_Input(){
+			dist = 0;
+			angle = 0;
+		}
+		
+
+		int getSize(){
+			return size;
+		}
+
+		float getDistance(){
+			return dist;
+		}
+
+		float getAngle(){
+			return angle;
+		}
+		
+		void setValues(float angle, float dist){
+			/*
+			Set all values that the NN input object needs.
+			Angle to food >> Distance to food >> 
+			*/
+			this-> angle = angle;
+			this-> dist = dist;
+		}
 
 
-	void display(){
-		std::cout << "Distance: " << dist << "," << "Angle: " << angle << std::endl;
-	}
+
+		void display(){
+			std::cout << "Distance: " << dist << "\n" << "Angle: " << angle << std::endl;
+		}
 };
 
 
