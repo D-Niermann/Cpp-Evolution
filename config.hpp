@@ -4,7 +4,7 @@
 struct config
 {
 	// window specific
-	static const unsigned int FRAMERATE = 60;
+	static const unsigned int FRAMERATE = 300;
 	static const bool VSYNC = false;
 	static const unsigned int WINDOW_X = 1200;
 	static const unsigned int WINDOW_Y = 800;
@@ -12,7 +12,7 @@ struct config
 
 	static constexpr float foodSpriteScale     = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
-	static constexpr float hunterSpridteScale   = 0.7;
+	static constexpr float hunterSpriteScale   = 0.7;
 	static const int worldMargin               = 20;
 
 	// world object specific
@@ -24,13 +24,15 @@ struct config
 	static const int REPRO_TIME_FOOD         = 1;   // in seconds
 
 	static const unsigned int S_CREATURES   = 10;
-	static const unsigned int MIN_CREATURES = 0;
-	static const unsigned int MAX_CREATURES = 15;
+	static const unsigned int MIN_CREATURES = 10;
+	static const unsigned int MAX_CREATURES = 30;
 	static const unsigned int S_FOOD        = 4;
 	static const unsigned int MAX_FOOD      = 20;
+	static const unsigned int MIN_HUNTERS   = 1;
+	static const unsigned int MAX_HUNTERS   = 3;
 	static const unsigned int S_HUNTERS     = 0;
 
-	static constexpr float MUTATION_FACTOR = 1;
+	static constexpr float MUTATION_FACTOR = 0.7;
 
 	// loading and saving
 	static const bool INIT_LOAD   = true;
@@ -42,5 +44,5 @@ struct config
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="C:/Users/Dario/Documents/GitHub/Evolution-Cpp/build/Saves/";
-const std::string config::LOAD_ID_CREATURES = "23071"; 
-const std::string config::LOAD_ID_HUNTERS = "23071"; 
+const std::string config::LOAD_ID_CREATURES = "28142"; 
+const std::string config::LOAD_ID_HUNTERS = "28142"; 

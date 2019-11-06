@@ -13,9 +13,8 @@ class Manager
 		std::vector<Food> food;
 		// hunters
 		std::vector<Hunter> hunters;
-	
-	
 
+	
 
 
 		// add class to given array
@@ -59,7 +58,7 @@ class Manager
 		}
 
 
-		void updateAll(const int& frame)
+		void updateAll(const int& frame, sf::Texture& foodText, sf::Texture& creatureText, sf::Texture& hunterText, sf::Font& font)
 		{
 			// updates all creatures
 			for(int i = 0; i<creatures.size(); i++){
@@ -73,11 +72,48 @@ class Manager
 			for(int i = 0; i<hunters.size(); i++){
 				hunters[i].update();
 			}
+
+
 			
-			if (frame%5 == 0)
+			if (frame%5 == 0){
 				CollisionCheckAndInput(creatures, food);
 				CollisionCheckAndInput(hunters, creatures);
+			}
 
+			if(frame % 60 == 0 && frame>0){
+				//// reproduce worldObjects
+				reproduceCreatures(creatureText, font);
+				// M.reproduceHunters(hunterText, font);
+				reproduceFood(foodText, font);
+			}
+
+			//update distance matrices
+			updateCCDistances();
+
+		}
+
+
+		void updateCCDistances(){
+			/*
+			Update creature creature distance matrix
+			*/
+			for(int i = 0; i < creatures.size(); i++){
+				std::vector<float> v;
+				for(int j = 0; j < creatures.size(); j++){
+					if (i!=j){
+						// size - 1 eintreage
+						v.push_back(Distance(creatures[i].getPos(), creatures[j].getPos()));
+					}
+				}
+				creatures[i].setCCDistances(v);
+			}
+
+
+		}
+
+		float Distance(position p1, position p2){
+			
+			return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
 		}
 
 		// calc the distance and collision between v1 to v2, give NN inputs to v1 where v2 is the food source 
@@ -109,7 +145,7 @@ class Manager
 					// food loop
 					
 					// calc distance to food j
-					dist_i = sqrt(pow(v1[i].getPos().x - v2[j].getPos().x, 2) + pow(v1[i].getPos().y - v2[j].getPos().y, 2));
+					dist_i = Distance(v1[i].getPos(), v2[j].getPos());
 					
 					// calc diff vector between creature and food and the angle of it
 					diff_vector.x = v1[i].getPos().x - v2[j].getPos().x;
@@ -131,7 +167,7 @@ class Manager
 					}
 
 
-				} // all food looped through and closest seeable food found
+				} // all food looped through and closest see-able food found
 
 				// give input to creature i from closest see-able food source save_j
 				if (save_j!=-1)
@@ -193,7 +229,11 @@ class Manager
 				for(int i = 0; i<creatures.size(); i++)
 				{
 				
-					if (creatures[i].isAlive() && creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && creatures[i].getLifetime()>0 && creatures[i].getHealth() > 0.85)
+					if (
+					creatures[i].isAlive() && 
+					creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && 
+					creatures[i].getLifetime()>0 && 
+					creatures[i].getHealth() > 0.85)
 					{
 						reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
 					}
@@ -214,16 +254,35 @@ class Manager
 
 		void reproduceHunters(sf::Texture& texture, sf::Font& font)
 		{
-			for(int i = 0; i<hunters.size(); i++)
-			{
-				if (hunters[i].getLifetime()%(config::REPRO_TIME_HUNTERS*60)==0 && hunters[i].getLifetime()>0 && hunters[i].getHealth()>0.85)
+			// if less then MIN_Hunters creatures are living, spawn in new random ones
+			if (hunters.size()<config::MIN_HUNTERS){
+				addWorldObject<Hunter>(1, hunters, texture, font);
+			}
+
+			
+			// if less then MAX_Creatures are living, allow reproduction (check every creature and reproduce them if allowed)
+			if (creatures.size()<config::MAX_CREATURES){
+				for(int i = 0; i<hunters.size(); i++)
 				{
-					reproduceWorldObject<Hunter>(1,hunters, texture, font, &hunters[i]);
+					if (
+					hunters[i].isAlive() && 
+					hunters[i].getLifetime()%(config::REPRO_TIME_HUNTERS*60)==0 && 
+					hunters[i].getLifetime()>0 && 
+					hunters[i].getHealth()>0.85)
+					{
+						reproduceWorldObject<Hunter>(1,hunters, texture, font, &hunters[i]);
+					}
 				}
 			}
-			// if (hunters.size() > config::MAX_CREATURES)
-			// 	cull(hunters);
-			// cleanDeads(hunters);
+			// delete corpses
+			for (int i = 0; i<hunters.size(); i++){
+				if (!hunters[i].isAlive())
+				{
+					
+					hunters.erase(hunters.begin()+i);
+					
+				}
+			}	
 		}
 
 		void reproduceFood(sf::Texture& texture, sf::Font& font){

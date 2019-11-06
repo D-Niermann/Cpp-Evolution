@@ -1,8 +1,9 @@
 #pragma once
 class Creature : public WorldObject
 {
+  private:
+	std::vector<float> CCDistances;
   protected:
-
 	static const int n_hidden_units = 3;
 	static const int n_output_units = 3;
 
@@ -124,18 +125,24 @@ class Creature : public WorldObject
 			WorldObject::update();
 
 			// set text1
-			m_text.setString("Out: "+ roundToString(NN.getOutput()[0],4) + ", " + roundToString(NN.getOutput()[1],4) + ", " +roundToString(NN.getOutput()[2],4));
+			// m_text.setString("Boost: "+ roundToString(NN.getOutput()[1],4) + "\nDist: " + roundToString(input_container.getDistance(),4));
+			m_text.setString(vectorString(CCDistances));
+
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));
-			// set text2 
-			// set text2 
-				// set text2 
-			// set text2 
+		
 
 		}
 	}
 
-	
+	std::string vectorString(std::vector<float> v){
+		std::string s;
+		for (int i = 0; i<v.size(); i++){
+			s = s + roundToString(v[i],5) + ", ";
+		}
+		return s;
+	}
+
 	void eat()
 	{
 		// gets called externally when collision with food is detected
@@ -173,6 +180,10 @@ class Creature : public WorldObject
 
 	const NN_Input& getInput() const {
 		return input_container;
+	}
+
+	void setCCDistances(std::vector<float> v){
+		this->CCDistances = v;
 	}
 	
 };
