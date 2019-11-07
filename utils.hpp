@@ -63,21 +63,28 @@ class NN_Input
 		// angle to the neares food source
 		float angle;
 		// average distance to others of same species
-		float same_dist;
+		float av_same_dist;
+		// min distance along same_dist vector
+		float min_same_dist;
 
 	public:
 		// number of input vars
-		static const int size = 3; // number of free input params in this class.
+		static const int size = 4; // number of free input params in this class.
 
 		NN_Input(){
 			dist = 0;
 			angle = 0;
-			same_dist = 0;
+			av_same_dist = 0;
+			min_same_dist = 0;
 		}
 		
 
-		float getSameDist(){
-			return same_dist;
+		float getMinSameDist(){
+			return min_same_dist;
+		}
+
+		float getAvSameDist(){
+			return av_same_dist;
 		}
 
 		float getDistance(){
@@ -88,21 +95,20 @@ class NN_Input
 			return angle;
 		}
 		
-		void setValues(float angle, float dist, float same_dist){
+		void setValues(float angle, float dist, float av_same_dist, float min_same_dist){
 			/*
 			Set all values that the NN input object needs.
-			Angle to food >> Distance to food >> 
+			Angle to food >> Distance to food >> average distance to same species >> min distance to same species
 			*/
 			this-> angle = angle;
 			this-> dist = dist;
-			this-> same_dist = same_dist;
+			this-> av_same_dist = av_same_dist;
+			this-> min_same_dist = min_same_dist;
 		}
 
 
 
-		std::string asString(){
-			return "Distance: " + roundToString(dist,4) + ", " +  "Angle: " + roundToString(angle,4) + ", " +"SameDist: " + roundToString(same_dist,4) + "\n";
-		}
+		
 };
 
 

@@ -125,8 +125,7 @@ class Creature : public WorldObject
 			WorldObject::update();
 
 			// set text1
-			// m_text.setString("Boost: "+ roundToString(NN.getOutput()[1],4) + "\nDist: " + roundToString(input_container.getDistance(),4));
-			m_text.setString("Input: "+input_container.asString()+"Output: "+ NN.getOutputString());
+			m_text.setString("Input: "+NN.getInputString()+"Output: "+ NN.getOutputString());
 
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));
@@ -183,6 +182,10 @@ class Creature : public WorldObject
 
 	float getAverageCCDist(){
 		return mean(CCDistances);
+	}
+
+	float getMinCCDist(){
+		return *std::min_element(CCDistances.begin(), CCDistances.end());
 	}
 	
 };

@@ -13,22 +13,24 @@ class NeuralNetwork
 		int n_input, n_hidden, n_output;
 
 		// layers
-		Eigen::Vector3f l_input;
+		Eigen::Vector4f l_input;
 		Eigen::Vector3f l_output;
 		Eigen::VectorXf l_hidden;
 		// weights
 		Eigen::MatrixXf weights1;
 		Eigen::MatrixXf weights2;
 		// bias
-		Eigen::Vector3f b_input;
+		Eigen::Vector4f b_input;
 		Eigen::Vector3f b_output;
 		Eigen::VectorXf b_hidden;
 		/* Network:
-						o
-		dis			o	o	o = forw speed and dir [-1,1]
-		ang			o	o	o = boost
-		distToSelf	o	o	o = rot. speed and dir [-1,1]
-						o
+							o
+		dis				o	o	o = forw speed and dir [-1,1]
+		ang				o	o	o = boost
+		AvDistToSelf	o	o	o = rot. speed and dir [-1,1]
+		MinDistToSelf	o	o
+							o
+							o	
 		*/
 
 		float w_init_multiplier = 0.2;
@@ -88,7 +90,8 @@ class NeuralNetwork
 			// convert input into eigen vector
 			l_input[0] = std::sqrt(input_container.getDistance());
 			l_input[1] = input_container.getAngle();
-			// l_input[2] = input_container.getSameDist();
+			l_input[2] = std::sqrt(input_container.getAvSameDist());
+			l_input[3] = std::sqrt(input_container.getMinSameDist());
 			// hidden units
 			l_hidden =  (weights1 * l_input) + b_hidden;
 			// l_hidden = clamp(l_hidden, -10, 10);
@@ -136,6 +139,15 @@ class NeuralNetwork
 				b_output(x) += random(-b_output(x)*P, b_output(x)*P);
 			}
 		
+		}
+		
+
+		const std::string getInputString(){
+			std::string string = "";
+			for (int i = 0; i<l_input.count(); i++){
+				string += roundToString(l_input[i],5)+",";
+			}
+			return string.substr(0,string.size()-2)+"\n";
 		}
 		
 

@@ -36,7 +36,7 @@ struct config
 	static constexpr float MUTATION_FACTOR = 0.7;
 
 	// loading and saving
-	static const bool INIT_LOAD   = true;
+	static const bool INIT_LOAD   = false;
 	static const bool DO_SAVE     = true;
 	static const bool DO_PRINTLOG = true;
 	static const std::string SAVE_PATH;

@@ -126,7 +126,7 @@ class Manager
 			NN_Input creature_input;
 			position diff_vector;
 
-			float angle;
+			float angle, view_angle;
 			// av_score = 0;
 			
 			// go through all creatures and food and if distance is below threshold destroy food and call creature[i].eat()
@@ -140,36 +140,36 @@ class Manager
 				// update collection vars
 				av_score += v1[i].getScore();
 				
-				for (int j = 0; j<v2.size(); j++)
-				{
-					// food loop
-					
-					// calc distance to food j
-					dist_i = Distance(v1[i].getPos(), v2[j].getPos());
-					
-					// calc diff vector between creature and food and the angle of it
-					diff_vector.x = v1[i].getPos().x - v2[j].getPos().x;
-					diff_vector.y = v1[i].getPos().y - v2[j].getPos().y;
-					angle = angle_in_deg(diff_vector,-v1[i].getV_e());
+						// food loop
+						for (int j = 0; j<v2.size(); j++)
+						{
+							
+							// calc distance to food j
+							dist_i = Distance(v1[i].getPos(), v2[j].getPos());
+							
+							// calc diff vector between creature and food and the angle of it
+							diff_vector.x = v1[i].getPos().x - v2[j].getPos().x;
+							diff_vector.y = v1[i].getPos().y - v2[j].getPos().y;
+							angle = angle_in_deg(diff_vector,-v1[i].getV_e());
 
-					// collision check to food j
-					if (dist_i < config::creatureFoodReach)
-					{
-						v1[i].eat();
-						v2.erase(v2.begin()+j);
-					}
-
-
-					// check if seen food is food j
-					if (std::abs(angle)< 90 && dist_i<closest_distance){
-						closest_distance = dist_i;
-						save_j = j;
-					}
+							// collision check to food j
+							if (dist_i < config::creatureFoodReach)
+							{
+								v1[i].eat();
+								v2.erase(v2.begin()+j);
+							}
 
 
-				} // all food looped through and closest see-able food found
+							// check if seen food is food j
+							if (std::abs(angle)< 90 && dist_i<closest_distance){
+								closest_distance = dist_i;
+								save_j = j;
+							}
 
-				// give input to creature i from closest see-able food source save_j
+
+						} // all food looped through and closest see-able food found
+
+				// if food found
 				if (save_j!=-1)
 				{
 					// calc distance to food j
@@ -178,30 +178,36 @@ class Manager
 					diff_vector.x = v1[i].getPos().x - v2[save_j].getPos().x;
 					diff_vector.y = v1[i].getPos().y - v2[save_j].getPos().y;
 					angle = vec_angle_in_deg(diff_vector.x, diff_vector.y);
+					view_angle = angle_in_deg(diff_vector,-v1[i].getV_e());
 
 					// set creature vertex 
 					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v2[save_j].getPos().x, v2[save_j].getPos().y), sf::Color(255,0,0));
 
-					// give input
-					creature_input.setValues(
-						angle_in_deg(diff_vector,-v1[i].getV_e()), 
-						closest_distance,
-						v1[i].getAverageCCDist());
-					v1[i].giveInput(creature_input);
-
 				}
+				// if food not found
 				else
 				{
 					// no plant visible
 					// set creature vertex 
 					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0));
-
-					creature_input.setValues(0, 100000, v1[i].getAverageCCDist());
+					
+					closest_distance = 100000;
+					view_angle = 0;
 					v1[i].giveInput(creature_input);
 				}
 
+
+				// give input to creature i
+				creature_input.setValues(
+					view_angle,
+					closest_distance,
+					v1[i].getAverageCCDist(),
+					v1[i].getMinCCDist());
+				v1[i].giveInput(creature_input);
+				
+				
 				if (v1[i].getScore()>best_score)
 				{
 					best_creature = &v1[i];
@@ -234,7 +240,7 @@ class Manager
 					creatures[i].isAlive() && 
 					creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && 
 					creatures[i].getLifetime()>0 && 
-					creatures[i].getHealth() > 0.85)
+					creatures[i].getHealth() > 0.75)
 					{
 						reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
 					}
