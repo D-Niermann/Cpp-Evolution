@@ -95,17 +95,17 @@ class Manager
 
 		void updateCCDistances(){
 			/*
-			Update creature creature distance matrix
+			Update creature creature distance values
 			*/
 			for(int i = 0; i < creatures.size(); i++){
-				std::vector<float> v;
+				std::vector<float> vec;
 				for(int j = 0; j < creatures.size(); j++){
 					if (i!=j){
 						// size - 1 eintreage
-						v.push_back(Distance(creatures[i].getPos(), creatures[j].getPos()));
+						vec.push_back(Distance(creatures[i].getPos(), creatures[j].getPos()));
 					}
 				}
-				creatures[i].setCCDistances(v);
+				creatures[i].setCCDistances(vec);
 			}
 
 
@@ -186,7 +186,8 @@ class Manager
 					// give input
 					creature_input.setValues(
 						angle_in_deg(diff_vector,-v1[i].getV_e()), 
-						dist_i);
+						closest_distance,
+						v1[i].getAverageCCDist());
 					v1[i].giveInput(creature_input);
 
 				}
@@ -197,7 +198,7 @@ class Manager
 					v1[i].vertices[0] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0,0));
 					v1[i].vertices[1] = sf::Vertex(sf::Vector2f(  v1[i].getPos().x,  v1[i].getPos().y), sf::Color(255,0,0));
 
-					creature_input.setValues(0, 100000);
+					creature_input.setValues(0, 100000, v1[i].getAverageCCDist());
 					v1[i].giveInput(creature_input);
 				}
 
@@ -294,6 +295,10 @@ class Manager
 			for(int i = 0; i<food.size(); i++){
 				if (food[i].getLifetime()%(config::REPRO_TIME_FOOD*60)==0 && food[i].getLifetime()>0 && food.size()<config::MAX_FOOD && randomInt(0,3)==0){
 					reproduceWorldObject<Food>(1,food,texture, font, &food[i]);
+				}
+				if (!food[i].isAlive())
+				{
+					food.erase(food.begin()+i);	
 				}
 			}
 		

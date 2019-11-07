@@ -134,6 +134,10 @@ class SFML_Display
 					if (event.key.code == sf::Keyboard::Down){
 						framerate *= 0.9;
 					}
+					// down O
+					if (event.key.code == sf::Keyboard::O){
+						config::DEBUG = !config::DEBUG;
+					}
 
 					if (framerate < config::FRAMERATE){
 						framerate = config::FRAMERATE;
@@ -177,11 +181,13 @@ class SFML_Display
 			for (int i = 0; i < M.creatures.size(); i++)
 			{
 				m_window.draw(M.creatures[i].getSprite());
-				// draw debug lines
-				// m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
-				// debug text
-				for (int t = 0; t<2; t++){
-					m_window.draw(M.creatures[i].getText(t));
+				if (config::DEBUG){
+					// draw debug lines
+					m_window.draw(M.creatures[i].vertices, 2, sf::Lines);
+					// debug text
+					for (int t = 0; t<2; t++){
+						m_window.draw(M.creatures[i].getText(t));
+					}
 				}
 			}
 			for (int i = 0; i < M.hunters.size(); i++)

@@ -79,3 +79,4 @@ struct config
 ```
 
 The Program can also be paused by pressing P and Simulation speed can be changes using the arrow keys.
+You can also press O to show more information.

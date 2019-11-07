@@ -4,7 +4,7 @@ class Creature : public WorldObject
   private:
 	std::vector<float> CCDistances;
   protected:
-	static const int n_hidden_units = 3;
+	static const int n_hidden_units = 5;
 	static const int n_output_units = 3;
 
 	static constexpr float max_move_speed = 2;
@@ -126,7 +126,7 @@ class Creature : public WorldObject
 
 			// set text1
 			// m_text.setString("Boost: "+ roundToString(NN.getOutput()[1],4) + "\nDist: " + roundToString(input_container.getDistance(),4));
-			m_text.setString(vectorString(CCDistances));
+			m_text.setString("Input: "+input_container.asString()+"Output: "+ NN.getOutputString());
 
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));
@@ -135,13 +135,7 @@ class Creature : public WorldObject
 		}
 	}
 
-	std::string vectorString(std::vector<float> v){
-		std::string s;
-		for (int i = 0; i<v.size(); i++){
-			s = s + roundToString(v[i],5) + ", ";
-		}
-		return s;
-	}
+
 
 	void eat()
 	{
@@ -157,8 +151,9 @@ class Creature : public WorldObject
 		// print("Deleted Creature");
 	}
 
-	void giveInput(const NN_Input& I){
-		this->input_container = I;
+	void giveInput(const NN_Input& InputContainer){
+		// reference to input container should this not be a copy? maybe the = already copies it into own member var
+		this->input_container = InputContainer;
 	}
 
 	position& getV_e(){
@@ -184,6 +179,10 @@ class Creature : public WorldObject
 
 	void setCCDistances(std::vector<float> v){
 		this->CCDistances = v;
+	}
+
+	float getAverageCCDist(){
+		return mean(CCDistances);
 	}
 	
 };

@@ -25,6 +25,7 @@
 
 int main()
 {
+	// config::load("C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/config.txt");
 	// sf::ContextSettings(0,0,4);
 
 	// srand(223132);

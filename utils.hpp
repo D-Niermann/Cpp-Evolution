@@ -3,6 +3,21 @@ struct CollectionVars
 	float av_score_creatures;
 };
 
+std::string roundToString(float n, int n_digits)
+{
+	return std::to_string(n).substr(0,n_digits);
+}
+
+
+std::string vectorToString(std::vector<float> v){
+	std::string s;
+	for (int i = 0; i<v.size(); i++){
+		s = s + roundToString(v[i],5) + ", ";
+	}
+	return s;
+}
+
+
 struct position
 {
 	float x, y;
@@ -31,6 +46,15 @@ struct position
 	}
 };
 
+float mean(std::vector<float> vec){
+	float buff = 0;
+	for(int i = 0; i<vec.size();i++){
+		buff += vec[i];
+	}
+	return buff/vec.size();
+}
+
+
 class NN_Input
 {
 	private: 
@@ -38,19 +62,22 @@ class NN_Input
 		float dist;
 		// angle to the neares food source
 		float angle;
-		// number of input vars
+		// average distance to others of same species
+		float same_dist;
 
 	public:
-		static const int size = 2; // number of free input params in this class.
+		// number of input vars
+		static const int size = 3; // number of free input params in this class.
 
 		NN_Input(){
 			dist = 0;
 			angle = 0;
+			same_dist = 0;
 		}
 		
 
-		int getSize(){
-			return size;
+		float getSameDist(){
+			return same_dist;
 		}
 
 		float getDistance(){
@@ -61,19 +88,20 @@ class NN_Input
 			return angle;
 		}
 		
-		void setValues(float angle, float dist){
+		void setValues(float angle, float dist, float same_dist){
 			/*
 			Set all values that the NN input object needs.
 			Angle to food >> Distance to food >> 
 			*/
 			this-> angle = angle;
 			this-> dist = dist;
+			this-> same_dist = same_dist;
 		}
 
 
 
-		void display(){
-			std::cout << "Distance: " << dist << "\n" << "Angle: " << angle << std::endl;
+		std::string asString(){
+			return "Distance: " + roundToString(dist,4) + ", " +  "Angle: " + roundToString(angle,4) + ", " +"SameDist: " + roundToString(same_dist,4) + "\n";
 		}
 };
 
@@ -122,10 +150,7 @@ position randomPositionInWindow()
 	return p; 
 }
 
-std::string roundToString(float n, int n_digits)
-{
-	return std::to_string(n).substr(0,n_digits);
-}
+
 
 float vec_angle_in_deg(float x, float y)
 {

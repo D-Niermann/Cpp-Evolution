@@ -13,14 +13,14 @@ class NeuralNetwork
 		int n_input, n_hidden, n_output;
 
 		// layers
-		Eigen::Vector2f l_input;
+		Eigen::Vector3f l_input;
 		Eigen::Vector3f l_output;
 		Eigen::VectorXf l_hidden;
 		// weights
 		Eigen::MatrixXf weights1;
 		Eigen::MatrixXf weights2;
 		// bias
-		Eigen::Vector2f b_input;
+		Eigen::Vector3f b_input;
 		Eigen::Vector3f b_output;
 		Eigen::VectorXf b_hidden;
 		/* Network:
@@ -88,7 +88,7 @@ class NeuralNetwork
 			// convert input into eigen vector
 			l_input[0] = std::sqrt(input_container.getDistance());
 			l_input[1] = input_container.getAngle();
-
+			// l_input[2] = input_container.getSameDist();
 			// hidden units
 			l_hidden =  (weights1 * l_input) + b_hidden;
 			// l_hidden = clamp(l_hidden, -10, 10);
@@ -142,9 +142,22 @@ class NeuralNetwork
 		const Vector3f& getOutput() const{
 			return l_output;
 		}
+		
+		const std::string getOutputString() const{
+			std::string string = "";
+			for (int i = 0; i<l_output.count(); i++){
+				string += roundToString(l_output[i],5)+",";
+			}
+			return string.substr(0,string.size()-2)+"\n";
+		}
+		
+		
 		const VectorXf& getHidden() const{
 			return l_hidden;
 		}
+
+
+
 		sf::Color calcColor(const float& f){
 			float r = 255 - std::abs(weights1.row(0).mean())*1000;
 			float g = 255 - std::abs(weights1.row(1).mean())*1000;
@@ -207,27 +220,32 @@ class NeuralNetwork
 			// Read numbers from file into buffer.
 			ifstream infile;
 			infile.open(filename);
-			while (! infile.eof())
-			{
-				string line;
-				getline(infile, line);
+			string line;
+			if (infile.is_open()){
+				while (! infile.eof())
+				{
+					getline(infile, line);
 
-				int temp_cols = 0;
-				stringstream stream(line);
-				while(! stream.eof())
-					stream >> buff[cols*rows+temp_cols++];
+					int temp_cols = 0;
+					stringstream stream(line);
+					while(! stream.eof())
+						stream >> buff[cols*rows+temp_cols++];
 
-				if (temp_cols == 0)
-					continue;
+					if (temp_cols == 0)
+						continue;
 
-				if (cols == 0)
-					cols = temp_cols;
+					if (cols == 0)
+						cols = temp_cols;
 
-				rows++;
+					rows++;
+				}
+
+				infile.close();
 			}
-
-			infile.close();
-
+			else{
+				cout<< "Could not load File!" << endl;
+				throw std::invalid_argument("Maybe wrong path to file? Please select a proper load path in config.");
+			}
 
 			// Populate matrix with numbers.
 			MatrixXf result(rows,cols);

@@ -1,0 +1,45 @@
+//
+//
+// Not used right now
+//
+//
+
+// window specific
+FRAMERATE = 300;
+VSYNC     = false;
+WINDOW_X  = 1200;
+WINDOW_Y  = 800;
+TEXTSIZE  = 12;
+
+foodSpriteScale     = 0.3;
+creatureSpriteScale = 1.0;
+hunterSpriteScale   = 0.7;
+worldMargin         = 20;
+
+// world object specific
+creatureDecayRate    = 0.001;
+hunterDecayRate      = 0.001;
+creatureFoodReach    = 30;
+REPRO_TIME_CREATURES = 10;     // in seconds
+REPRO_TIME_HUNTERS   = 3;      // in seconds
+REPRO_TIME_FOOD      = 1;      // in seconds
+
+S_CREATURES   = 10;
+MIN_CREATURES = 10;
+MAX_CREATURES = 30;
+S_FOOD        = 4;
+MAX_FOOD      = 20;
+MIN_HUNTERS   = 1;
+MAX_HUNTERS   = 3;
+S_HUNTERS     = 0;
+
+MUTATION_FACTOR = 0.7;
+
+// loading and saving
+INIT_LOAD   = true;
+DO_SAVE     = true;
+DO_PRINTLOG = true;
+
+SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
+LOAD_ID_CREATURES = "28142"; 
+LOAD_ID_HUNTERS = "28142"; 

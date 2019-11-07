@@ -4,11 +4,12 @@
 struct config
 {
 	// window specific
-	static const unsigned int FRAMERATE = 300;
-	static const bool VSYNC = false;
-	static const unsigned int WINDOW_X = 1200;
-	static const unsigned int WINDOW_Y = 800;
-	static const unsigned int TEXTSIZE = 12;
+	static const unsigned int FRAMERATE = 60;
+	static const bool VSYNC             = false;
+	static const unsigned int WINDOW_X  = 1200;
+	static const unsigned int WINDOW_Y  = 800;
+	static const unsigned int TEXTSIZE  = 12;
+	static bool DEBUG;                  
 
 	static constexpr float foodSpriteScale     = 0.3;
 	static constexpr float creatureSpriteScale = 1.0;
@@ -43,6 +44,47 @@ struct config
 	static const std::string LOAD_ID_HUNTERS;
 };
 // initialisations for config
-const std::string config::SAVE_PATH ="C:/Users/Dario/Documents/GitHub/Evolution-Cpp/build/Saves/";
-const std::string config::LOAD_ID_CREATURES = "28142"; 
-const std::string config::LOAD_ID_HUNTERS = "28142"; 
+const std::string config::SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
+const std::string config::LOAD_ID_CREATURES = "10525"; 
+const std::string config::LOAD_ID_HUNTERS = "10525"; 
+bool config::DEBUG = false;
+
+
+
+
+
+
+
+
+
+// to be implemented in config 
+void static load(std::string filepath){
+	// not used
+	std::map<std::string, std::string> config_vars;
+	// Read numbers from file into buffer.
+	std::string line;
+	std::string value;
+	std::string substring;
+	std::ifstream myfile(filepath);
+	if (myfile.is_open())
+	{
+		while ( getline(myfile,line) )
+		{
+			value = "" ; // line.substr(line.find("="),line.length()-1);
+			substring = line.substr(0,line.find(" "));
+			if (substring != "//"){
+				config_vars[substring] = value;
+			}
+		}
+		// for(auto elem : config_vars)
+		// {
+		// std::cout << elem.first << " " << elem.second << "\n";
+		// }
+		myfile.close();
+	}
+
+	else std::cout << "Unable to open file"; 
+
+	myfile.close();
+
+}
