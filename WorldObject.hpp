@@ -8,7 +8,7 @@ class WorldObject
 	static const int S_LIFETIME = 0;
 
 	//constants
-	float m_DecayRate = 0.001;
+	float m_DecayRate = 0.0003;
 	int ID = randomInt(0,RAND_MAX);
 	std::string type_str;
 	
@@ -28,9 +28,7 @@ class WorldObject
 	
 
 	virtual void calcHealth(){ 
-		float h;
-		h = this->health - m_DecayRate;
-		health = h;
+		health = health - m_DecayRate;
 	}
 
 	virtual void calcScore(){
@@ -62,11 +60,12 @@ class WorldObject
 	virtual void update()
 	{
 		lifetime += 1;
-		if (is_alive)
+		if (is_alive){
 			calcHealth();
 			calcScore();
 			aliveCheck();
 			transformSprite();
+		}
 	}
 
 	void boundaryCheck(){

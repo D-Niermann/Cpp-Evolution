@@ -14,11 +14,12 @@ class Creature : public WorldObject
 	int food_eaten = 0;
 
 	// values that get assigned by the NN outputs
-	float cur_speed;
-	float cur_rotation;
-	float cur_boost;
+	float cur_speed = 0;
+	float cur_rotation = 0;
+	float cur_boost = 0;
 	
-
+	//
+	int time_last_reproduction = 0;
 
 	// input container contains all possible input vars from creature
 	NN_Input input_container;
@@ -34,10 +35,7 @@ class Creature : public WorldObject
 	}
 
 	void calcHealth() override{ 
-		// decr health if boost (NN output[1]) is higher than 1, but save health if boost is lower 1
-		float h;
-		h = this -> health  - m_DecayRate*clamp(NN.getOutput()[1],0.5,2);
-		health = h;
+		health = health  - m_DecayRate*cur_boost;
 	}
 
 	void updateV_e()
@@ -46,7 +44,6 @@ class Creature : public WorldObject
 		v_e.x = std::cos(rot*3.1415/180);
 		v_e.y = std::sin(rot*3.1415/180);
 	}
-
 
   public:
 	sf::Vertex vertices[2] ;
@@ -78,7 +75,7 @@ class Creature : public WorldObject
 		respawn(position(x,y));
 		// take over the food_eaten score, bec otherwise it will get culled instantly 
 		// food_eaten = C->food_eaten;
-		rot = C->rot + 90;
+		rot = C->rot + randomInt(-90,90);
 		// mutate 
 		NN.mutateW();
 		NN.mutateB();
@@ -119,6 +116,7 @@ class Creature : public WorldObject
 
 			// base class update call
 			WorldObject::update();
+			time_last_reproduction += 1;
 
 			// calc output of NN
 			NN.propagate(input_container);
@@ -198,4 +196,12 @@ class Creature : public WorldObject
 		return *std::min_element(CCDistances.begin(), CCDistances.end());
 	}
 	
+	int getLastReproTime(){
+		return time_last_reproduction;
+	}
+	
+	void resetLastReproTime(){
+		time_last_reproduction = 0;
+	}
+
 };

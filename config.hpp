@@ -17,13 +17,15 @@ struct config
 	static const int worldMargin               = 20;
 
 	// world object specific
-	static constexpr float creatureDecayRate = 0.001;
+	static constexpr float creatureDecayRate = 0.0005;
 	static constexpr float hunterDecayRate   = 0.001;
 	static constexpr float creatureFoodReach = 30;
 	static const int REPRO_TIME_CREATURES    = 10;  // in seconds
 	static const int REPRO_TIME_HUNTERS      = 3;   // in seconds
 	static const int REPRO_TIME_FOOD         = 1;   // in seconds
 
+	static const int CREATURE_VIEW_ANGLE = 75; // field of view of creatures
+	
 	static const unsigned int S_CREATURES   = 10;
 	static const unsigned int MIN_CREATURES = 10;
 	static const unsigned int MAX_CREATURES = 30;
@@ -33,10 +35,12 @@ struct config
 	static const unsigned int MAX_HUNTERS   = 3;
 	static const unsigned int S_HUNTERS     = 0;
 
+	
+	
 	static constexpr float MUTATION_FACTOR = 0.7;
 
 	// loading and saving
-	static const bool INIT_LOAD   = false;
+	static const bool INIT_LOAD   = true;
 	static const bool DO_SAVE     = true;
 	static const bool DO_PRINTLOG = true;
 	static const std::string SAVE_PATH;
@@ -45,8 +49,8 @@ struct config
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
-const std::string config::LOAD_ID_CREATURES = "10525"; 
-const std::string config::LOAD_ID_HUNTERS = "10525"; 
+const std::string config::LOAD_ID_CREATURES = "14705"; 
+const std::string config::LOAD_ID_HUNTERS = "0"; 
 bool config::DEBUG = false;
 
 

@@ -166,7 +166,7 @@ class Manager
 
 
 							// check if seen food is food j
-							if (std::abs(angle)< 90 && dist_i<closest_distance){
+							if (std::abs(angle)< config::CREATURE_VIEW_ANGLE && dist_i<closest_distance){
 								closest_distance = dist_i;
 								save_j = j;
 							}
@@ -238,17 +238,17 @@ class Manager
 
 			// if less then MAX_Creatures are living, allow reproduction (check every creature and reproduce them if allowed)
 			if (creatures.size()<config::MAX_CREATURES){
-				
 				for(int i = 0; i<creatures.size(); i++)
 				{
 				
 					if (
 					creatures[i].isAlive() && 
-					creatures[i].getLifetime()%(config::REPRO_TIME_CREATURES*60)==0 && 
+					creatures[i].getLastReproTime() > (config::REPRO_TIME_CREATURES*60)&& 
 					creatures[i].getLifetime()>0 && 
 					creatures[i].getHealth() > 0.75)
 					{
 						reproduceWorldObject<Creature>(1,creatures, texture, font, &creatures[i]);
+						creatures[i].resetLastReproTime();
 					}
 				}
 			}
@@ -339,8 +339,8 @@ class Manager
 			int best_i = findCreature(best_creature_id);
 
 			if (config::DO_SAVE and best_i != -1){
-				if (creatures[best_i].getNN().save(creatures[best_i].getID(), config::SAVE_PATH)){
-					print("Saved best Neural Network!");
+				if (creatures[best_i].getNN().save(getBestCreatureID(), config::SAVE_PATH)){
+					print("Saved best Neural Network! " + roundToString(getBestCreatureID(),5));
 				}
 			}
 			else{
