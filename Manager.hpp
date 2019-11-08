@@ -3,9 +3,9 @@ class Manager
 {
 	protected:
 
-		Creature* best_creature;
+		// Creature* best_creature;
+		int best_creature_id;
 		float av_score;
-
 	public:
 		// creatures
 		std::vector<Creature> creatures;
@@ -15,7 +15,11 @@ class Manager
 		std::vector<Hunter> hunters;
 
 	
-
+		// init of variables
+		Manager(){
+			best_creature_id = 0;
+			av_score = 0;
+		}
 
 		// add class to given array
 		template < class T >
@@ -122,6 +126,7 @@ class Manager
 		{
 			float dist_i;
 			float best_score = 0;
+			// best_creature_id = 0;
 			
 			NN_Input creature_input;
 			position diff_vector;
@@ -210,9 +215,10 @@ class Manager
 				
 				if (v1[i].getScore()>best_score)
 				{
-					best_creature = &v1[i];
+					best_creature_id = v1[i].getID();
 					best_score = v1[i].getScore();
 				}
+				
 	
 			}
 			if (creatures.size() > 0){
@@ -310,22 +316,37 @@ class Manager
 		
 		}
 
-		const Creature* getBestCreature(){
-			return best_creature;
+		int getBestCreatureID(){
+			return best_creature_id;
 		}
 
-		const float& getAvHealth(){
+		float getAvHealth(){
 			return av_score;
 		}
+
 		
+		int findCreature(int ID){
+			for(int i = 0; i < creatures.size(); i++){
+				if (creatures[i].getID() == ID){
+					return i;
+				}
+			}
+			return -1;
+		}
+
 		~Manager()
 		{
-			if (config::DO_SAVE)
-				if (
-					(*best_creature).getNN().save(best_creature->getID(),config::SAVE_PATH)
-					)
-					print("Saved best Neural Network!");
+			int best_i = findCreature(best_creature_id);
 
+			if (config::DO_SAVE and best_i != -1){
+				if (creatures[best_i].getNN().save(creatures[best_i].getID(), config::SAVE_PATH)){
+					print("Saved best Neural Network!");
+				}
+			}
+			else{
+				print("Warning: Could not save best creature!");
+				print(best_i,"best_i : ");
+			}
 				// save best hunter
 		}
 

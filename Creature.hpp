@@ -12,6 +12,11 @@ class Creature : public WorldObject
 	static constexpr float eps = 0.0001;
 
 	int food_eaten = 0;
+
+	// values that get assigned by the NN outputs
+	float cur_speed;
+	float cur_rotation;
+	float cur_boost;
 	
 
 
@@ -106,26 +111,31 @@ class Creature : public WorldObject
 		food_eaten = 0;
 	}
 
+
+
 	void update() override
 	{
 		if (is_alive){
 
-			// calc output of NN
-			NN.propagate(input_container);
-
-			updateV_e();
-
-			// transform
-			pos.x += v_e.x * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2);  // move based on NN output [0] and boost NN output [1]
-			pos.y += v_e.y * clamp(NN.getOutput()[0],-max_move_speed,max_move_speed) * clamp(NN.getOutput()[1],0.5,2); // move based on NN output [0] and boost NN output [1]
-			rot += clamp(NN.getOutput()[2],-max_rot_speed,max_rot_speed);
-
-
 			// base class update call
 			WorldObject::update();
 
+			// calc output of NN
+			NN.propagate(input_container);
+			cur_speed = (NN.getOutput()[0] - 0.5)*max_move_speed;
+			cur_boost = NN.getOutput()[1] * 2;
+			cur_rotation = (NN.getOutput()[2] -0.5) * max_rot_speed;
+			
+
+			// transform
+			updateV_e();
+			pos.x += v_e.x * cur_speed * cur_boost;  // move based on NN output [0] and boost NN output [1]
+			pos.y += v_e.y * cur_speed * cur_boost; // move based on NN output [0] and boost NN output [1]
+			rot += cur_rotation;
+
+
 			// set text1
-			m_text.setString("Input: "+NN.getInputString()+"Output: "+ NN.getOutputString());
+			m_text.setString("ID: " + roundToString(getID(),5) + "\n" + "Input: "+NN.getInputString()+"Output: "+ NN.getOutputString());
 
 			m_text.setPosition(pos.x+20, pos.y+10);
 			m_text.setFillColor(sf::Color(0,0,0,health*255));

@@ -24,16 +24,17 @@ class NeuralNetwork
 		Eigen::Vector3f b_output;
 		Eigen::VectorXf b_hidden;
 		/* Network:
+		 Sigmoid activation functions
 							o
-		dis				o	o	o = forw speed and dir [-1,1]
-		ang				o	o	o = boost
-		AvDistToSelf	o	o	o = rot. speed and dir [-1,1]
+		dis				o	o	o = forw speed and dir [0,1]
+		ang				o	o	o = boost [0, 1]
+		AvDistToSelf	o	o	o = rot. speed and dir [0,1]
 		MinDistToSelf	o	o
 							o
 							o	
 		*/
 
-		float w_init_multiplier = 0.2;
+		float w_init_multiplier = 0.4;
 
 	public:
 		NeuralNetwork(int n_input, int n_hidden, int n_output) : n_input(n_input), n_hidden(n_hidden), n_output(n_output)
@@ -45,7 +46,7 @@ class NeuralNetwork
 			b_hidden = b_hidden.Random(n_hidden)*w_init_multiplier;
 			b_output = b_output.Random(n_output)*w_init_multiplier;
 			b_input = b_input.Random(n_input)*w_init_multiplier;
-			b_output(0) = 0.2;
+			
 			// weights1.block(1,0,n_hidden_units-1,1) = MatrixXf().Zero(n_hidden_units-1,1);
 			// zero init of visible layers
 			l_input = l_input.Zero(n_input);
@@ -85,6 +86,15 @@ class NeuralNetwork
 			
 		}
 
+		VectorXf sigmoid(VectorXf vec){
+			VectorXf result;
+			result = result.Zero(vec.size());
+			for (int i = 0; i< vec.size(); i++){
+				result[i] = 1/(1+std::exp(-vec[i]));
+			}
+			return result;
+		}
+
 		void propagate(NN_Input& input_container)
 		{
 			// convert input into eigen vector
@@ -93,9 +103,9 @@ class NeuralNetwork
 			l_input[2] = std::sqrt(input_container.getAvSameDist());
 			l_input[3] = std::sqrt(input_container.getMinSameDist());
 			// hidden units
-			l_hidden =  (weights1 * l_input) + b_hidden;
+			l_hidden =  sigmoid((weights1 * l_input) + b_hidden);
 			// l_hidden = clamp(l_hidden, -10, 10);
-			l_output =  (weights2 * l_hidden)+ b_output;
+			l_output =  sigmoid((weights2 * l_hidden) + b_output);
 		}
 
 		void mutateW()

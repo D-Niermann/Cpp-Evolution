@@ -60,8 +60,8 @@ class SFML_Display
 			print_str += "Active Plants:\t" + std::to_string(M.food.size()) +"\n";
 			print_str += "Game Speed:\t" + std::to_string(framerate) + "\n";
 
-			if (M.getBestCreature()!=NULL)
-				print_str += "Best Creature:\t"+std::to_string(M.getBestCreature() -> getID())+"\n";
+			// if (M.findCreature(M.getBestCreatureID())!=-1)
+			print_str += "Best Creature:\t"+std::to_string(M.getBestCreatureID())+"\n";
 
 			// set the string to the text object
 			m_text.setString(print_str);
