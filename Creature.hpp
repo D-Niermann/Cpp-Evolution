@@ -121,7 +121,7 @@ class Creature : public WorldObject
 			// calc output of NN
 			NN.propagate(input_container);
 			cur_speed = (NN.getOutput()[0] - 0.5)*max_move_speed;
-			cur_boost = NN.getOutput()[1] * 2;
+			cur_boost = clamp(NN.getOutput()[1] * 2,0.5,2);
 			cur_rotation = (NN.getOutput()[2] -0.5) * max_rot_speed;
 			
 
@@ -193,6 +193,9 @@ class Creature : public WorldObject
 	}
 
 	float getMinCCDist(){
+		if(CCDistances.size()==0){
+			return 0;
+		}
 		return *std::min_element(CCDistances.begin(), CCDistances.end());
 	}
 	

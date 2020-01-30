@@ -193,9 +193,11 @@ class SFML_Display
 			for (int i = 0; i < M.hunters.size(); i++)
 			{
 				m_window.draw(M.hunters[i].getSprite());
-				m_window.draw(M.hunters[i].vertices, 2, sf::Lines);
-				for (int t = 0; t<2; t++){
-					m_window.draw(M.hunters[i].getText(t));
+				if(config::DEBUG){
+					m_window.draw(M.hunters[i].vertices, 2, sf::Lines);
+					for (int t = 0; t<2; t++){
+						m_window.draw(M.hunters[i].getText(t));
+					}
 				}
 			}
 

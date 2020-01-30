@@ -55,7 +55,7 @@ int main()
 
 
 		// food
-		M.addWorldObject<Food>(config::S_FOOD-1, M.food, Display.textureFood, Display.font);
+		M.addWorldObject<Food>(config::S_FOOD, M.food, Display.textureFood, Display.font);
 
 
 

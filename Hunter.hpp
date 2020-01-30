@@ -37,7 +37,7 @@ class Hunter : public Creature
 			respawn(position(x,y));
 			// take over the food_eaten score, bec otherwise it will get culled instantly 
 			// food_eaten = C->food_eaten;
-			rot = C->rot + 90;
+			rot = C->rot + randomInt(-90,90);
 			// // mutate 
 			NN.mutateW();
 			NN.mutateB();

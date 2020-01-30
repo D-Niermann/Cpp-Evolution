@@ -47,11 +47,17 @@ struct position
 };
 
 float mean(std::vector<float> vec){
-	float buff = 0;
-	for(int i = 0; i<vec.size();i++){
-		buff += vec[i];
+	if (vec.size()>0){
+
+		float buff = 0;
+		for(int i = 0; i<vec.size();i++){
+			buff += vec[i];
+		}
+		return buff/vec.size();
 	}
-	return buff/vec.size();
+	else{
+		return 0;
+	}
 }
 
 

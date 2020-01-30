@@ -6,8 +6,8 @@ struct config
 	// window specific
 	static const unsigned int FRAMERATE = 60;
 	static const bool VSYNC             = false;
-	static const unsigned int WINDOW_X  = 1200;
-	static const unsigned int WINDOW_Y  = 800;
+	static const unsigned int WINDOW_X  = 1680;
+	static const unsigned int WINDOW_Y  = 1000;
 	static const unsigned int TEXTSIZE  = 12;
 	static bool DEBUG;                  
 
@@ -31,7 +31,7 @@ struct config
 	static const unsigned int MAX_CREATURES = 30;
 	static const unsigned int S_FOOD        = 4;
 	static const unsigned int MAX_FOOD      = 20;
-	static const unsigned int MIN_HUNTERS   = 1;
+	static const unsigned int MIN_HUNTERS   = 2;
 	static const unsigned int MAX_HUNTERS   = 3;
 	static const unsigned int S_HUNTERS     = 0;
 
@@ -49,8 +49,8 @@ struct config
 };
 // initialisations for config
 const std::string config::SAVE_PATH ="C:/Users/dniermann/Documents/GitHub/Cpp-Evolution/build/Saves/";
-const std::string config::LOAD_ID_CREATURES = "14705"; 
-const std::string config::LOAD_ID_HUNTERS = "0"; 
+const std::string config::LOAD_ID_CREATURES = "7186"; 
+const std::string config::LOAD_ID_HUNTERS = "7186"; 
 bool config::DEBUG = false;
 
 

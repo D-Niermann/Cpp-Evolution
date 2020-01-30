@@ -87,12 +87,13 @@ class Manager
 			if(frame % 60 == 0 && frame>0){
 				//// reproduce worldObjects
 				reproduceCreatures(creatureText, font);
-				// M.reproduceHunters(hunterText, font);
+				// reproduceHunters(hunterText, font);
 				reproduceFood(foodText, font);
 			}
 
-			//update distance matrices
+			//update distance values
 			updateCCDistances();
+			updateHHDistances();
 
 		}
 
@@ -111,9 +112,22 @@ class Manager
 				}
 				creatures[i].setCCDistances(vec);
 			}
-
-
 		}
+
+
+		void updateHHDistances(){
+			for(int i = 0; i < hunters.size(); i++){
+				std::vector<float> vec;
+				for(int j = 0; j < hunters.size(); j++){
+					if (i!=j){
+						// size - 1 eintreage
+						vec.push_back(Distance(hunters[i].getPos(), hunters[j].getPos()));
+					}
+				}
+				hunters[i].setCCDistances(vec);
+			}
+		}
+
 
 		float Distance(position p1, position p2){
 			
@@ -273,17 +287,18 @@ class Manager
 			}
 
 			
-			// if less then MAX_Creatures are living, allow reproduction (check every creature and reproduce them if allowed)
-			if (creatures.size()<config::MAX_CREATURES){
+			// if less then MAX_HUNTERS are living, allow reproduction (check every creature and reproduce them if allowed)
+			if (creatures.size()<config::MAX_HUNTERS){
 				for(int i = 0; i<hunters.size(); i++)
 				{
 					if (
 					hunters[i].isAlive() && 
-					hunters[i].getLifetime()%(config::REPRO_TIME_HUNTERS*60)==0 && 
+					hunters[i].getLastReproTime()>(config::REPRO_TIME_HUNTERS*60) && 
 					hunters[i].getLifetime()>0 && 
 					hunters[i].getHealth()>0.85)
 					{
 						reproduceWorldObject<Hunter>(1,hunters, texture, font, &hunters[i]);
+						hunters[i].resetLastReproTime();
 					}
 				}
 			}
